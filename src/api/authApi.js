@@ -44,14 +44,18 @@ export const resetPasswordApi = async (token, newPassword) => {
   const res = await axios.post(`${API_URL}/auth/reset-password`, {
     token,
     newPassword,
+    confirmPassword,
   });
   return res.data;
 };
 
-export const changePasswordApi = async (token, { oldPassword, newPassword }) => {
+export const changePasswordApi = async (
+  token,
+  { oldPassword, newPassword, confirmPassword }
+) => {
   const res = await axios.post(
     `${API_URL}/auth/change-password`,
-    { oldPassword, newPassword },
+    { oldPassword, newPassword, confirmPassword },
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return res.data;
