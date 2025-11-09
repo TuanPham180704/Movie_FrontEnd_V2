@@ -42,8 +42,8 @@ export default function Header() {
         setOpenUserMenu(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   return (
@@ -56,10 +56,8 @@ export default function Header() {
               <p className="text-xs text-gray-400">Phim hay cá rố</p>
             </div>
           </Link>
-
           <SearchBox />
         </div>
-
         <nav className="hidden lg:flex items-center gap-6 text-sm grow justify-center relative">
           <Link to="/movies/list/phim-le" className="hover:text-yellow-400">
             Phim Lẻ
@@ -70,6 +68,7 @@ export default function Header() {
           <Link to="/movies/list/hoat-hinh" className="hover:text-yellow-400">
             Hoạt Hình
           </Link>
+
           <DropdownMenuClick
             title="Thể loại"
             items={genres}
@@ -85,6 +84,7 @@ export default function Header() {
             items={years.map((y) => ({ name: y, slug: y }))}
             basePath="/movies/years"
           />
+
           <Link
             to="/booking"
             className="bg-yellow-500 hover:bg-yellow-400 text-black font-medium px-4 py-2 rounded-full transition"
@@ -92,12 +92,14 @@ export default function Header() {
             Đặt vé xem phim
           </Link>
         </nav>
-
-        <div className="flex items-center gap-4 shrink-0" ref={userMenuRef}>
+        <div className="flex items-center gap-4 shrink-0">
           {token ? (
-            <div className="relative">
+            <div className="relative" ref={userMenuRef}>
               <button
-                onClick={() => setOpenUserMenu((prev) => !prev)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenUserMenu((prev) => !prev);
+                }}
                 className="flex items-center bg-gray-700 rounded-full px-3 py-1 text-sm hover:bg-gray-600 transition"
               >
                 <FaUser className="mr-2" />
@@ -109,19 +111,28 @@ export default function Header() {
                   <Link
                     to="/profile"
                     className="block px-4 py-2 text-sm hover:bg-gray-700"
-                    onClick={() => setOpenUserMenu(false)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenUserMenu(false);
+                    }}
                   >
                     Tài Khoản
                   </Link>
                   <Link
                     to="/tickets"
                     className="block px-4 py-2 text-sm hover:bg-gray-700"
-                    onClick={() => setOpenUserMenu(false)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenUserMenu(false);
+                    }}
                   >
                     Vé Đã Đặt
                   </Link>
                   <button
-                    onClick={handleLogout}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLogout();
+                    }}
                     className="w-full text-left px-4 py-2 text-sm hover:bg-red-600 hover:text-white transition"
                   >
                     Đăng Xuất
@@ -154,14 +165,17 @@ function DropdownMenuClick({ title, items, basePath }) {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   return (
     <div className="relative" ref={menuRef}>
       <button
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((prev) => !prev);
+        }}
         className={`cursor-pointer hover:text-yellow-400 transition ${
           open ? "text-yellow-400" : ""
         }`}
@@ -176,7 +190,10 @@ function DropdownMenuClick({ title, items, basePath }) {
               <Link
                 key={item.slug}
                 to={`${basePath}/${item.slug}`}
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(false);
+                }}
                 className="block py-1 px-2 text-sm hover:text-yellow-400 hover:bg-gray-700 rounded transition"
               >
                 {item.name}

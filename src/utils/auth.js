@@ -3,7 +3,7 @@ export const setToken = (token) => {
 };
 
 export const getToken = () => {
-  localStorage.getItem("token");
+  return localStorage.getItem("token");
 };
 
 export const removeToken = () => {
@@ -33,11 +33,11 @@ export const setForgotEmail = (email) => {
 };
 
 export const getForgotEmail = () => {
-  localStorage.getItem("forgotemail");
+  return localStorage.getItem("forgotemail");
 };
 
 export const removeForgotEmail = () => {
   localStorage.removeItem("forgotemail");
 };
 
-export const isLogedIn = () => !getToken();
+export const isLogedIn = () => !!getToken();

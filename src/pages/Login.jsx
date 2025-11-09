@@ -23,7 +23,7 @@ export default function Login() {
         qc.invalidateQueries({ queryKey: ["me"] });
         toast.success(`Chào mừng ${user?.username || "bạn"} quay lại!`);
         if (user.role === "admin") {
-          navigate("/admin/dashboard", { replace: true });
+          navigate("/admin", { replace: true });
         } else {
           navigate("/", { replace: true });
         }

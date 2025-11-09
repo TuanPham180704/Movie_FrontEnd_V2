@@ -18,9 +18,9 @@ export const registerApi = async ({ username, email, password }) => {
 
 export const getProfileApi = async (token) => {
   const res = await axios.get(`${API_URL}/auth/me`, {
-    headers: { Authorization: `Bearer {token}` },
+    headers: { Authorization: `Bearer ${token}` },
   });
-  return res.datas;
+  return res.data;
 };
 
 export const updateProfileApi = async (
