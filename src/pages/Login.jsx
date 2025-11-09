@@ -6,7 +6,6 @@ import { setToken } from "../utils/auth";
 import { toast } from "react-toastify";
 import logoWeb from "../assets/logoWeb.png";
 
-
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,14 +16,17 @@ export default function Login() {
   const mutation = useMutation({
     mutationFn: loginApi,
     onSuccess(data) {
-      console.log("Login response:", data);
       const token = data?.user?.token;
       const user = data?.user?.user;
       if (token) {
         setToken(token);
         qc.invalidateQueries({ queryKey: ["me"] });
         toast.success(`Chào mừng ${user?.username || "bạn"} quay lại!`);
-        navigate("/", { replace: true });
+        if (user.role === "admin") {
+          navigate("/admin/dashboard", { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
       } else {
         toast.error("Đăng nhập thất bại, vui lòng thử lại");
       }
