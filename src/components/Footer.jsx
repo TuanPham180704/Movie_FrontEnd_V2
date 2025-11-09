@@ -36,7 +36,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-tr from-[#F5C400] to-[#FFD84D] rounded-full p-[3px] flex items-center justify-center shadow-md hover:scale-105 transition-transform duration-300">
+              <div className="bg-linear-to-tr from-[#F5C400] to-[#FFD84D] rounded-full p-[3px] flex items-center justify-center shadow-md hover:scale-105 transition-transform duration-300">
                 <img
                   src={anhAdmin}
                   alt="anhTuanDev"

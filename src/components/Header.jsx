@@ -1,6 +1,187 @@
+import { Link, useNavigate } from "react-router-dom";
+import { removeToken } from "../utils/auth";
+import { useState, useEffect, useRef } from "react";
+import { FaUser } from "react-icons/fa";
+import axios from "axios";
+import SearchBox from "./SearchBox";
 
 export default function Header() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const [genres, setGenres] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
+  const userMenuRef = useRef(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [genreRes, countryRes] = await Promise.all([
+          axios.get("http://localhost:8080/api/movies/genres"),
+          axios.get("http://localhost:8080/api/movies/countries"),
+        ]);
+        setGenres(genreRes.data || []);
+        setCountries(countryRes.data || []);
+      } catch (err) {
+        console.error("Lỗi khi tải thể loại / quốc gia:", err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const years = Array.from({ length: 10 }, (_, i) => 2025 - i);
+
+  const handleLogout = () => {
+    removeToken();
+    navigate("/login");
+  };
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setOpenUserMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <div>Header</div>
-  )
+    <header className="bg-[#1b1b1b] text-white shadow-md z-50 relative">
+      <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-3">
+        <div className="flex items-center gap-4 shrink-0">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="leading-tight">
+              <h1 className="text-xl font-semibold">🎬 DevChill</h1>
+              <p className="text-xs text-gray-400">Phim hay cá rố</p>
+            </div>
+          </Link>
+
+          <SearchBox />
+        </div>
+
+        <nav className="hidden lg:flex items-center gap-6 text-sm grow justify-center relative">
+          <Link to="/movies/list/phim-le" className="hover:text-yellow-400">
+            Phim Lẻ
+          </Link>
+          <Link to="/movies/list/phim-bo" className="hover:text-yellow-400">
+            Phim Bộ
+          </Link>
+          <Link to="/movies/list/hoat-hinh" className="hover:text-yellow-400">
+            Hoạt Hình
+          </Link>
+          <DropdownMenuClick
+            title="Thể loại"
+            items={genres}
+            basePath="/movies/genres"
+          />
+          <DropdownMenuClick
+            title="Quốc gia"
+            items={countries}
+            basePath="/movies/countries"
+          />
+          <DropdownMenuClick
+            title="Năm"
+            items={years.map((y) => ({ name: y, slug: y }))}
+            basePath="/movies/years"
+          />
+        </nav>
+
+        <div className="flex items-center gap-4 shrink-0" ref={userMenuRef}>
+          {token ? (
+            <div className="relative">
+              <button
+                onClick={() => setOpenUserMenu((prev) => !prev)}
+                className="flex items-center bg-gray-700 rounded-full px-3 py-1 text-sm hover:bg-gray-600 transition"
+              >
+                <FaUser className="mr-2" />
+                Thông tin cá nhân
+              </button>
+
+              {openUserMenu && (
+                <div className="absolute right-0 mt-2 w-44 bg-[#222] border border-gray-700 rounded-md shadow-lg py-2 z-50 animate-fadeIn">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm hover:bg-gray-700"
+                    onClick={() => setOpenUserMenu(false)}
+                  >
+                    Tài Khoản
+                  </Link>
+                  <Link
+                    to="/tickets"
+                    className="block px-4 py-2 text-sm hover:bg-gray-700"
+                    onClick={() => setOpenUserMenu(false)}
+                  >
+                    Vé Đã Đặt
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-red-600 hover:text-white transition"
+                  >
+                    Đăng Xuất
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center bg-gray-700 rounded-full px-3 py-1 text-sm hover:bg-gray-600 transition"
+            >
+              <FaUser className="mr-2" />
+              Thành viên
+            </Link>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+
+function DropdownMenuClick({ title, items, basePath }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className={`cursor-pointer hover:text-yellow-400 transition ${
+          open ? "text-yellow-400" : ""
+        }`}
+      >
+        {title}
+      </button>
+
+      {open && (
+        <div className="absolute bg-gray-800 rounded shadow-lg mt-2 p-3 w-48 z-50 animate-fadeIn">
+          {items && items.length > 0 ? (
+            items.map((item) => (
+              <Link
+                key={item.slug}
+                to={`${basePath}/${item.slug}`}
+                onClick={() => setOpen(false)}
+                className="block py-1 px-2 text-sm hover:text-yellow-400 hover:bg-gray-700 rounded transition"
+              >
+                {item.name}
+              </Link>
+            ))
+          ) : (
+            <span className="text-gray-400 text-sm">Đang tải...</span>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
