@@ -1,8 +1,9 @@
+import AppRouter from "./routes/AppRouter";
 function App() {
   return (
-    <>
-      <h1 className="bg-amber-500">Hello</h1>
-    </>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <AppRouter />
+    </div>
   );
 }
 

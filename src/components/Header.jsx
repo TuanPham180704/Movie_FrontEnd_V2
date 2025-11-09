@@ -85,6 +85,12 @@ export default function Header() {
             items={years.map((y) => ({ name: y, slug: y }))}
             basePath="/movies/years"
           />
+          <Link
+            to="/booking"
+            className="bg-yellow-500 hover:bg-yellow-400 text-black font-medium px-4 py-2 rounded-full transition"
+          >
+            Đặt vé xem phim
+          </Link>
         </nav>
 
         <div className="flex items-center gap-4 shrink-0" ref={userMenuRef}>
@@ -137,7 +143,6 @@ export default function Header() {
     </header>
   );
 }
-
 
 function DropdownMenuClick({ title, items, basePath }) {
   const [open, setOpen] = useState(false);
