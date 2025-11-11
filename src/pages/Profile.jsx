@@ -1,155 +1,266 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { getProfileApi } from "../api/authApi";
+import { getProfileApi, updateProfileApi } from "../api/authApi";
+import { removeToken } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   FaHeart,
   FaListUl,
   FaHistory,
   FaBell,
-  FaUserCircle,
+  FaUser,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { logout } from "../utils/auth";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const location = useLocation();
+  const [formData, setFormData] = useState({
+    email: "",
+    username: "",
+    gender: "unknown",
+    avatar_url: "",
+  });
 
-  const isActive = (path) =>
-    location.pathname === path
-      ? "bg-gray-800 text-yellow-400 font-semibold"
-      : "text-gray-400 hover:text-white";
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Bạn chưa đăng nhập!");
+        navigate("/login");
+        return;
+      }
+
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          window.location.href = "/login";
-          return;
-        }
         const data = await getProfileApi(token);
         setUser(data);
-      } catch (err) {
-        console.error("Lỗi lấy thông tin user:", err);
-      } finally {
-        setLoading(false);
+        setFormData({
+          email: data.email || "",
+          username: data.username || "",
+          gender: data.gender || "unknown",
+          avatar_url: data.avatar_url || "",
+        });
+      } catch (error) {
+        console.error(error);
+        toast.error("Không thể tải thông tin tài khoản!");
       }
     };
-    fetchProfile();
-  }, []);
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-[80vh] bg-[#0f0f0f]">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
-      </div>
-    );
+    fetchProfile();
+  }, [navigate]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Ảnh quá lớn! Vui lòng chọn ảnh dưới 2MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData((prev) => ({ ...prev, avatar_url: reader.result }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Submit form cập nhật profile
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    try {
+      await updateProfileApi(token, formData);
+      toast.success("Cập nhật thông tin thành công!");
+      setUser((prev) => ({ ...prev, ...formData }));
+    } catch (error) {
+      console.error(error);
+      toast.error("Lỗi khi cập nhật thông tin!");
+    }
+  };
+
+  // Logout
+  const handleLogout = () => {
+    removeToken();
+    toast.info("Đã đăng xuất!");
+    navigate("/login");
+  };
 
   if (!user)
     return (
-      <div className="flex justify-center items-center h-[80vh] bg-[#0f0f0f]">
-        <p className="text-gray-400 text-lg">Không tìm thấy thông tin người dùng</p>
+      <div className="flex items-center justify-center h-screen text-white">
+        Đang tải...
       </div>
     );
 
   return (
-    <div className="flex min-h-screen bg-[#0f0f0f] font-sans text-gray-200">
-      {/* Sidebar */}
-      <aside className="w-[280px] bg-[#111] p-6 flex flex-col justify-between rounded-r-[50px] shadow-xl">
-        <div>
-          <h2 className="text-xl font-bold mb-6 text-white">Quản lý tài khoản</h2>
-          <nav className="flex flex-col gap-3">
-            <Link to="/favorites" className={`flex items-center gap-3 p-3 rounded-lg transition ${isActive("/favorites")}`}>
-              <FaHeart className="text-pink-500 w-5 h-5" /> Yêu thích
-            </Link>
-            <Link to="/list" className={`flex items-center gap-3 p-3 rounded-lg transition ${isActive("/list")}`}>
-              <FaListUl className="text-blue-500 w-5 h-5" /> Danh sách
-            </Link>
-            <Link to="/continue" className={`flex items-center gap-3 p-3 rounded-lg transition ${isActive("/continue")}`}>
-              <FaHistory className="text-yellow-400 w-5 h-5" /> Xem tiếp
-            </Link>
-            <Link to="/notifications" className={`flex items-center gap-3 p-3 rounded-lg transition ${isActive("/notifications")}`}>
-              <FaBell className="text-red-500 w-5 h-5" /> Thông báo
-            </Link>
-            <Link to="/profile" className={`flex items-center gap-3 p-3 rounded-lg transition ${isActive("/profile")}`}>
-              <FaUserCircle className="text-yellow-400 w-5 h-5" /> Tài khoản
-            </Link>
-          </nav>
-        </div>
-
-        <div className="mt-6 border-t border-gray-700 pt-6">
-          <div className="flex items-center gap-4 mb-3">
-            <img
-              src={user.avatar_url || "/default-avatar.png"}
-              alt="Avatar"
-              className="w-12 h-12 rounded-full object-cover border-2 border-gray-700"
-            />
-            <div>
-              <p className="font-semibold text-white">{user.username}</p>
-              <p className="text-sm text-gray-400">{user.email}</p>
-            </div>
+    <div className="min-h-screen bg-[#121212] text-white flex justify-center py-10">
+      <div className="flex gap-10 w-10/12">
+        <aside className="bg-[#1A1A1A] w-80 rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h2 className="text-lg font-semibold mb-6">Quản lý tài khoản</h2>
+            <ul className="space-y-4">
+              <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
+                <FaHeart className="text-yellow-400" /> Yêu thích
+              </li>
+              <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
+                <FaListUl className="text-yellow-400" /> Danh sách
+              </li>
+              <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
+                <FaHistory className="text-yellow-400" /> Xem tiếp
+              </li>
+              <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
+                <FaBell className="text-yellow-400" /> Thông báo
+              </li>
+              <li className="flex items-center gap-3 text-yellow-400 font-medium cursor-pointer">
+                <FaUser /> Tài khoản
+              </li>
+            </ul>
           </div>
-          <button
-            onClick={() => {
-              logout();
-              window.location.href = "/login";
-            }}
-            className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition"
-          >
-            <FaSignOutAlt /> Thoát
-          </button>
-        </div>
-      </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex justify-center items-start py-10 px-8">
-        <div className="bg-[#181818] rounded-3xl p-10 shadow-2xl border border-[#2a2a2a] w-full max-w-3xl">
-          <h2 className="text-3xl font-bold mb-4 text-white">Tài khoản</h2>
-          <p className="text-gray-400 mb-8">Thông tin cá nhân của bạn</p>
-
-          <div className="flex flex-col gap-4 bg-[#121212] rounded-2xl p-6 shadow-inner border border-[#2a2a2a]">
-            <div className="flex items-center gap-4">
+          {/* Thông tin user dưới cùng */}
+          <div className="border-t border-gray-700 pt-4">
+            <div className="flex items-center gap-3">
               <img
-                src={user.avatar_url || "/default-avatar.png"}
-                alt="Avatar"
-                className="w-20 h-20 rounded-full object-cover border-2 border-gray-700"
+                src={
+                  user.avatar_url ||
+                  "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                }
+                alt="avatar"
+                className="w-12 h-12 rounded-full object-cover"
               />
-              <div className="flex flex-col gap-1">
-                <p className="text-white font-semibold text-lg">{user.username}</p>
-                <p className="text-gray-400 text-sm">{user.email}</p>
-                <p className="text-gray-400 text-sm capitalize">{user.gender || "Chưa cập nhật"}</p>
+              <div>
+                <p className="font-semibold">{user.username}</p>
                 {user.is_premium && (
-                  <span className="text-yellow-400 font-semibold text-sm">Premium</span>
+                  <span className="text-yellow-400 text-sm">🌟 Premium</span>
                 )}
+                <p className="text-gray-400 text-sm">{user.email}</p>
               </div>
             </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 mt-4 text-gray-400 hover:text-white"
+            >
+              <FaSignOutAlt /> Thoát
+            </button>
+          </div>
+        </aside>
 
-            <div className="flex flex-col gap-2 mt-4">
-              <p className="text-gray-300">
-                <span className="font-medium text-white">👤 Username:</span> {user.username}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-medium text-white">📧 Email:</span> {user.email}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-medium text-white">⚥ Giới tính:</span> {user.gender || "Chưa cập nhật"}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-medium text-white">💎 Premium:</span> {user.is_premium ? "Có" : "Không"}
+        {/* Form cập nhật tài khoản */}
+        <main className="flex-1 bg-[#1A1A1A] rounded-2xl p-8">
+          <h2 className="text-xl font-semibold mb-2">Tài khoản</h2>
+          <p className="text-gray-400 mb-8">Cập nhật thông tin tài khoản</p>
+
+          <form onSubmit={handleSubmit} className="flex gap-8">
+            <div className="flex-1 space-y-6">
+              <div>
+                <label className="block text-gray-400 mb-2">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  readOnly
+                  className="w-full bg-[#222] border border-gray-700 rounded-lg p-3"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-2">Tên hiển thị</label>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="w-full bg-[#222] border border-gray-700 rounded-lg p-3"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-2">Giới tính</label>
+                <div className="flex items-center gap-5 text-gray-300">
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="male"
+                      checked={formData.gender === "male"}
+                      onChange={handleChange}
+                      className="mr-1"
+                    />
+                    Nam
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="female"
+                      checked={formData.gender === "female"}
+                      onChange={handleChange}
+                      className="mr-1"
+                    />
+                    Nữ
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="unknown"
+                      checked={formData.gender === "unknown"}
+                      onChange={handleChange}
+                      className="mr-1"
+                    />
+                    Không xác định
+                  </label>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-2 px-6 rounded-lg"
+              >
+                Cập nhật
+              </button>
+
+              <p className="text-gray-400">
+                Đổi mật khẩu, nhấn vào{" "}
+                <span
+                  onClick={() => navigate("/change-password")}
+                  className="text-yellow-400 cursor-pointer"
+                >
+                  đây
+                </span>
               </p>
             </div>
-          </div>
 
-          <button
-            className="mt-7 w-full py-3 rounded-xl bg-linear-to-r from-yellow-400 to-orange-500 text-white font-semibold shadow-lg hover:brightness-110 transition-all"
-            onClick={() => alert("Chức năng chỉnh sửa thông tin sắp ra mắt 😄")}
-          >
-            Chỉnh sửa thông tin
-          </button>
-        </div>
-      </main>
+            {/* Avatar upload */}
+            <div className="flex flex-col items-center justify-start gap-3">
+              <img
+                src={
+                  formData.avatar_url ||
+                  "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                }
+                alt="avatar"
+                className="w-32 h-32 rounded-full object-cover"
+              />
+
+              <label className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-4 rounded cursor-pointer text-center">
+                Chọn ảnh
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarChange}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          </form>
+        </main>
+      </div>
     </div>
   );
 }

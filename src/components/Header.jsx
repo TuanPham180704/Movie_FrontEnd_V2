@@ -36,6 +36,7 @@ export default function Header() {
     removeToken();
     navigate("/login");
   };
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
@@ -49,6 +50,7 @@ export default function Header() {
   return (
     <header className="bg-[#1b1b1b] text-white shadow-md z-50 relative">
       <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-3">
+        {/* Logo + Search */}
         <div className="flex items-center gap-4 shrink-0">
           <Link to="/" className="flex items-center gap-2">
             <div className="leading-tight">
@@ -58,6 +60,8 @@ export default function Header() {
           </Link>
           <SearchBox />
         </div>
+
+        {/* Menu chính */}
         <nav className="hidden lg:flex items-center gap-6 text-sm grow justify-center relative">
           <Link to="/movies/list/phim-le" className="hover:text-yellow-400">
             Phim Lẻ
@@ -69,17 +73,17 @@ export default function Header() {
             Hoạt Hình
           </Link>
 
-          <DropdownMenuClick
+          <DropdownHover
             title="Thể loại"
             items={genres}
             basePath="/movies/genres"
           />
-          <DropdownMenuClick
+          <DropdownHover
             title="Quốc gia"
             items={countries}
             basePath="/movies/countries"
           />
-          <DropdownMenuClick
+          <DropdownHover
             title="Năm"
             items={years.map((y) => ({ name: y, slug: y }))}
             basePath="/movies/years"
@@ -92,6 +96,8 @@ export default function Header() {
             Đặt vé xem phim
           </Link>
         </nav>
+
+        {/* User menu */}
         <div className="flex items-center gap-4 shrink-0">
           {token ? (
             <div className="relative" ref={userMenuRef}>
@@ -155,55 +161,45 @@ export default function Header() {
   );
 }
 
-function DropdownMenuClick({ title, items, basePath }) {
+/* --- Component Dropdown Hover --- */
+function DropdownHover({ title, items, basePath }) {
   const [open, setOpen] = useState(false);
-  const menuRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          setOpen((prev) => !prev);
-        }}
-        className={`cursor-pointer hover:text-yellow-400 transition ${
-          open ? "text-yellow-400" : ""
+        className={`cursor-pointer transition-colors duration-200 ${
+          open ? "text-yellow-400" : "hover:text-yellow-400"
         }`}
       >
         {title}
       </button>
 
-      {open && (
-        <div className="absolute bg-gray-800 rounded shadow-lg mt-2 p-3 w-48 z-50 animate-fadeIn">
-          {items && items.length > 0 ? (
-            items.map((item) => (
-              <Link
-                key={item.slug}
-                to={`${basePath}/${item.slug}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpen(false);
-                }}
-                className="block py-1 px-2 text-sm hover:text-yellow-400 hover:bg-gray-700 rounded transition"
-              >
-                {item.name}
-              </Link>
-            ))
-          ) : (
-            <span className="text-gray-400 text-sm">Đang tải...</span>
-          )}
-        </div>
-      )}
+      <div
+        className={`absolute bg-gray-800 rounded shadow-lg mt-2 p-3 w-48 z-50 transform transition-all duration-200 ease-in-out ${
+          open
+            ? "opacity-100 translate-y-0 visible"
+            : "opacity-0 -translate-y-2 invisible"
+        }`}
+      >
+        {items && items.length > 0 ? (
+          items.map((item) => (
+            <Link
+              key={item.slug}
+              to={`${basePath}/${item.slug}`}
+              className="block py-1 px-2 text-sm hover:text-yellow-400 hover:bg-gray-700 rounded transition"
+            >
+              {item.name}
+            </Link>
+          ))
+        ) : (
+          <span className="text-gray-400 text-sm">Đang tải...</span>
+        )}
+      </div>
     </div>
   );
 }

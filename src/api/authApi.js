@@ -27,7 +27,7 @@ export const updateProfileApi = async (
   token,
   { username, email, gender, avatar_url }
 ) => {
-  const res = await axios.patch(
+  const res = await axios.put(
     `${API_URL}/auth/me`,
     { username, email, gender, avatar_url },
     { headers: { Authorization: `Bearer ${token}` } }
