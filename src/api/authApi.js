@@ -40,7 +40,7 @@ export const forgotPasswordApi = async (email) => {
   return res.data;
 };
 
-export const resetPasswordApi = async (token, newPassword) => {
+export const resetPasswordApi = async (token, newPassword, confirmPassword) => {
   const res = await axios.post(`${API_URL}/auth/reset-password`, {
     token,
     newPassword,
@@ -53,7 +53,7 @@ export const changePasswordApi = async (
   token,
   { oldPassword, newPassword, confirmPassword }
 ) => {
-  const res = await axios.post(
+  const res = await axios.put(
     `${API_URL}/auth/change-password`,
     { oldPassword, newPassword, confirmPassword },
     { headers: { Authorization: `Bearer ${token}` } }

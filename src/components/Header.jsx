@@ -50,7 +50,6 @@ export default function Header() {
   return (
     <header className="bg-[#1b1b1b] text-white shadow-md z-50 relative">
       <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-3">
-        {/* Logo + Search */}
         <div className="flex items-center gap-4 shrink-0">
           <Link to="/" className="flex items-center gap-2">
             <div className="leading-tight">
@@ -61,7 +60,6 @@ export default function Header() {
           <SearchBox />
         </div>
 
-        {/* Menu chính */}
         <nav className="hidden lg:flex items-center gap-6 text-sm grow justify-center relative">
           <Link to="/movies/list/phim-le" className="hover:text-yellow-400">
             Phim Lẻ
@@ -97,7 +95,6 @@ export default function Header() {
           </Link>
         </nav>
 
-        {/* User menu */}
         <div className="flex items-center gap-4 shrink-0">
           {token ? (
             <div className="relative" ref={userMenuRef}>
@@ -114,6 +111,16 @@ export default function Header() {
 
               {openUserMenu && (
                 <div className="absolute right-0 mt-2 w-44 bg-[#222] border border-gray-700 rounded-md shadow-lg py-2 z-50 animate-fadeIn">
+                  <Link
+                    to="/premium"
+                    className="block px-4 py-2 text-sm bg-amber-400 hover:bg-blue-700"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenUserMenu(false);
+                    }}
+                  >
+                    Nâng Cấp Premium
+                  </Link>
                   <Link
                     to="/profile"
                     className="block px-4 py-2 text-sm hover:bg-gray-700"
@@ -161,7 +168,6 @@ export default function Header() {
   );
 }
 
-/* --- Component Dropdown Hover --- */
 function DropdownHover({ title, items, basePath }) {
   const [open, setOpen] = useState(false);
 

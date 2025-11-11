@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { getProfileApi, updateProfileApi } from "../api/authApi";
+import {
+  getProfileApi,
+  updateProfileApi,
+  changePasswordApi,
+} from "../api/authApi";
 import { removeToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ChangePassword from "./Client/Popup/ChangePassword";
 import {
   FaHeart,
   FaListUl,
@@ -14,12 +19,28 @@ import {
 
 export default function Profile() {
   const [user, setUser] = useState(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     username: "",
     gender: "unknown",
     avatar_url: "",
   });
+
+  const handleChangePassword = async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await changePasswordApi(token, data);
+      toast.success(res.message || "Đổi mật khẩu thành công!");
+      setShowChangePassword(false);
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        err.response?.data?.message ||
+          "Đổi mật khẩu thất bại, vui lòng thử lại!"
+      );
+    }
+  };
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -229,7 +250,7 @@ export default function Profile() {
               <p className="text-gray-400">
                 Đổi mật khẩu, nhấn vào{" "}
                 <span
-                  onClick={() => navigate("/change-password")}
+                  onClick={() => setShowChangePassword(true)}
                   className="text-yellow-400 cursor-pointer"
                 >
                   đây
@@ -237,7 +258,6 @@ export default function Profile() {
               </p>
             </div>
 
-            {/* Avatar upload */}
             <div className="flex flex-col items-center justify-start gap-3">
               <img
                 src={
@@ -261,6 +281,11 @@ export default function Profile() {
           </form>
         </main>
       </div>
+      <ChangePassword
+        isOpen={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+        onSubmit={handleChangePassword}
+      />
     </div>
   );
 }
