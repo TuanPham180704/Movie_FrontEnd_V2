@@ -10,10 +10,12 @@ import CategoryPage from "../components/CategoryPage";
 import ProtectedRoute from "./ProtectedRoute";
 import MovieDetail from "../pages/MovieDetail";
 import Profile from "../pages/Profile";
+import NotFound from "../pages/NotFound";
+import ForgotPassword from "../components/Client/ForgotPassword";
+import ResetPassword from "../components/Client/ResetPassword";
+
 import AdminLayout from "../pages/Admin/AdminLayout";
 import Dashboard from "../pages/Admin/Dashboard";
-import NotFound from "../pages/NotFound";
-import ForgotPassword from "../components/ForgotPassword";
 
 export default function AppRouter() {
   return (
@@ -25,6 +27,7 @@ export default function AppRouter() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/movies/phim-bo" element={<MovieList />} />
             <Route path="/movies/phim-le" element={<MovieList />} />
             <Route path="/movies/hoat-hinh" element={<MovieList />} />

@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { forgotPasswordApi } from "../api/authApi";
+import { useNavigate } from "react-router-dom"; // 👈 sửa ở đây: import useNavigate
+import { forgotPasswordApi } from "../../api/authApi";
 import { toast } from "react-toastify";
 
-export default function ForgotPassword({ onClose }) {
+export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,7 +15,7 @@ export default function ForgotPassword({ onClose }) {
     try {
       await forgotPasswordApi(email);
       toast.success("Gửi email khôi phục thành công!");
-      onClose?.();
+      navigate("/login"); 
     } catch (err) {
       toast.error(err.response?.data?.error || "Lỗi khi gửi yêu cầu!");
     } finally {
@@ -22,16 +24,23 @@ export default function ForgotPassword({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="min-h-screen bg-[#0f111a] flex items-center justify-center">
       <div className="bg-[#1b1e2b] p-6 rounded-2xl shadow-xl w-[420px] text-white">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">Quên mật khẩu</h2>
-          <button onClick={onClose}>✕</button>
+          <button onClick={() => navigate("/login")}>✕</button>
         </div>
+
         <p className="text-sm text-gray-300 mb-3">
           Nếu bạn đã có tài khoản,{" "}
-          <span className="text-yellow-400 cursor-pointer">đăng nhập</span>
+          <span
+            onClick={() => navigate("/login")} 
+            className="text-yellow-400 cursor-pointer"
+          >
+            đăng nhập
+          </span>
         </p>
+
         <form onSubmit={handleSubmit}>
           <input
             type="email"

@@ -7,7 +7,7 @@ import {
 import { removeToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import ChangePassword from "./Client/Popup/ChangePassword";
+import ChangePassword from "../components/Client/ChangePassword";
 import {
   FaHeart,
   FaListUl,
