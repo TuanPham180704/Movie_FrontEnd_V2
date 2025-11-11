@@ -12,6 +12,8 @@ import MovieDetail from "../pages/MovieDetail";
 import Profile from "../pages/Profile";
 import AdminLayout from "../pages/Admin/AdminLayout";
 import Dashboard from "../pages/Admin/Dashboard";
+import NotFound from "../pages/NotFound";
+import ForgotPassword from "../components/ForgotPassword";
 
 export default function AppRouter() {
   return (
@@ -22,6 +24,7 @@ export default function AppRouter() {
             <Route index element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/movies/phim-bo" element={<MovieList />} />
             <Route path="/movies/phim-le" element={<MovieList />} />
             <Route path="/movies/hoat-hinh" element={<MovieList />} />
@@ -45,6 +48,7 @@ export default function AppRouter() {
               <Route path="/admin" element={<Dashboard />} />
             </Route>
           </Route>
+          <Route element={<NotFound />} path="*" />
         </Routes>
       </BrowserRouter>
       <ToastContainer position="top-right" autoClose={2000} />
