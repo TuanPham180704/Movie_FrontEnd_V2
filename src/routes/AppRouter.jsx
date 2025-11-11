@@ -9,8 +9,9 @@ import MovieList from "../components/MovieList";
 import CategoryPage from "../components/CategoryPage";
 import ProtectedRoute from "./ProtectedRoute";
 import MovieDetail from "../pages/MovieDetail";
-import AdminPage from "../pages/Admin/AdminPage";
 import Profile from "../pages/Profile";
+import AdminLayout from "../pages/Admin/AdminLayout";
+import Dashboard from "../pages/Admin/Dashboard";
 
 export default function AppRouter() {
   return (
@@ -20,7 +21,6 @@ export default function AppRouter() {
           <Route path="/" element={<AppLayout />}>
             <Route index element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/register" element={<Register />} />
             <Route path="/movies/phim-bo" element={<MovieList />} />
             <Route path="/movies/phim-le" element={<MovieList />} />
@@ -33,13 +33,16 @@ export default function AppRouter() {
             <Route path="/movies/years/:slug" element={<MovieList />} />
             <Route path="/movies/:type/:slug" element={<MovieList />} />
             <Route path="/category/:type" element={<CategoryPage />} />
-
-            <Route element={<ProtectedRoute roles={["user", "admin"]} />}>
+          </Route>
+          <Route element={<ProtectedRoute roles={["user"]} />}>
+            <Route element={<AppLayout />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
+          </Route>
 
-            <Route element={<ProtectedRoute roles={["admin"]} />}>
-              <Route path="/admin" element={<AdminPage />} />
+          <Route element={<ProtectedRoute roles={["admin"]} />}>
+            <Route element={<AdminLayout />}>
+              <Route path="/admin" element={<Dashboard />} />
             </Route>
           </Route>
         </Routes>

@@ -127,16 +127,16 @@ export default function Profile() {
             <h2 className="text-lg font-semibold mb-6">Quản lý tài khoản</h2>
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
-                <FaHeart className="text-yellow-400" /> Yêu thích
+                <FaHeart className="text-white-400" /> Yêu thích
               </li>
               <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
-                <FaListUl className="text-yellow-400" /> Danh sách
+                <FaListUl className="text-white-400" /> Danh sách
               </li>
               <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
-                <FaHistory className="text-yellow-400" /> Xem tiếp
+                <FaHistory className="text-white-400" /> Xem tiếp
               </li>
               <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
-                <FaBell className="text-yellow-400" /> Thông báo
+                <FaBell className="text-white-400" /> Thông báo
               </li>
               <li className="flex items-center gap-3 text-yellow-400 font-medium cursor-pointer">
                 <FaUser /> Tài khoản
@@ -144,7 +144,6 @@ export default function Profile() {
             </ul>
           </div>
 
-          {/* Thông tin user dưới cùng */}
           <div className="border-t border-gray-700 pt-4">
             <div className="flex items-center gap-3">
               <img
@@ -160,7 +159,9 @@ export default function Profile() {
                 {user.is_premium && (
                   <span className="text-yellow-400 text-sm">🌟 Premium</span>
                 )}
-                <p className="text-gray-400 text-sm">{user.email}</p>
+                <p className="text-gray-400 text-sm pointer-events-none opacity-50 cursor-not-allowed">
+                  {user.email}
+                </p>
               </div>
             </div>
             <button
@@ -172,7 +173,6 @@ export default function Profile() {
           </div>
         </aside>
 
-        {/* Form cập nhật tài khoản */}
         <main className="flex-1 bg-[#1A1A1A] rounded-2xl p-8">
           <h2 className="text-xl font-semibold mb-2">Tài khoản</h2>
           <p className="text-gray-400 mb-8">Cập nhật thông tin tài khoản</p>
