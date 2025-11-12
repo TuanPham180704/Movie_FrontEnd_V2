@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api";
+const API_URL =
+  import.meta.env.VITE_MOVIE_API_BASE || "http://localhost:8080/api";
 
 export const loginApi = async ({ email, password }) => {
   const res = await axios.post(`${API_URL}/auth/login`, { email, password });
