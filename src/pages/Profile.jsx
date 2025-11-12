@@ -26,7 +26,6 @@ export default function Profile() {
     gender: "unknown",
     avatar_url: "",
   });
-
   const handleChangePassword = async (data) => {
     try {
       const token = localStorage.getItem("token");
@@ -41,7 +40,6 @@ export default function Profile() {
       );
     }
   };
-
   const navigate = useNavigate();
   useEffect(() => {
     const fetchProfile = async () => {
@@ -69,12 +67,10 @@ export default function Profile() {
 
     fetchProfile();
   }, [navigate]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -90,8 +86,6 @@ export default function Profile() {
     };
     reader.readAsDataURL(file);
   };
-
-  // Submit form cập nhật profile
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -104,8 +98,6 @@ export default function Profile() {
       toast.error("Lỗi khi cập nhật thông tin!");
     }
   };
-
-  // Logout
   const handleLogout = () => {
     removeToken();
     toast.info("Đã đăng xuất!");
@@ -143,7 +135,6 @@ export default function Profile() {
               </li>
             </ul>
           </div>
-
           <div className="border-t border-gray-700 pt-4">
             <div className="flex items-center gap-3">
               <img
@@ -172,7 +163,6 @@ export default function Profile() {
             </button>
           </div>
         </aside>
-
         <main className="flex-1 bg-[#1A1A1A] rounded-2xl p-8">
           <h2 className="text-xl font-semibold mb-2">Tài khoản</h2>
           <p className="text-gray-400 mb-8">Cập nhật thông tin tài khoản</p>
@@ -189,7 +179,6 @@ export default function Profile() {
                   className="w-full bg-[#222] border border-gray-700 rounded-lg p-3"
                 />
               </div>
-
               <div>
                 <label className="block text-gray-400 mb-2">Tên hiển thị</label>
                 <input
@@ -200,7 +189,6 @@ export default function Profile() {
                   className="w-full bg-[#222] border border-gray-700 rounded-lg p-3"
                 />
               </div>
-
               <div>
                 <label className="block text-gray-400 mb-2">Giới tính</label>
                 <div className="flex items-center gap-5 text-gray-300">
@@ -239,7 +227,6 @@ export default function Profile() {
                   </label>
                 </div>
               </div>
-
               <button
                 type="submit"
                 className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-2 px-6 rounded-lg"
@@ -257,7 +244,6 @@ export default function Profile() {
                 </span>
               </p>
             </div>
-
             <div className="flex flex-col items-center justify-start gap-3">
               <img
                 src={
