@@ -14,7 +14,7 @@ import NotFound from "../pages/NotFound";
 import ForgotPassword from "../components/Client/ForgotPassword";
 import ResetPassword from "../components/Client/ResetPassword";
 
-import AdminLayout from "../pages/Admin/AdminLayout";
+import AdminLayout from "../layouts/AdminLayout";
 import Dashboard from "../pages/Admin/Dashboard";
 
 export default function AppRouter() {

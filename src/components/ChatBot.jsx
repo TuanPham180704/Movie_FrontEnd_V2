@@ -8,6 +8,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
+
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
@@ -17,7 +18,6 @@ export default function ChatBot() {
     const userMsg = { from: "user", text: input };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
-
     setIsTyping(true);
 
     try {
@@ -27,7 +27,6 @@ export default function ChatBot() {
         body: JSON.stringify({ message: input }),
       });
       const data = await res.json();
-
       setIsTyping(false);
       const aiMsg = { from: "ai", text: data.response };
       setMessages((prev) => [...prev, aiMsg]);
@@ -44,7 +43,7 @@ export default function ChatBot() {
     <>
       <motion.div
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 bg-white shadow-xl rounded-full p-4 cursor-pointer z-50"
+        className="fixed bottom-5 right-5 bg-white shadow-xl rounded-full p-4 cursor-pointer z-50"
         animate={{
           y: [0, -5, 0],
           scale: [1, 1.05, 1],
@@ -73,17 +72,21 @@ export default function ChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.9 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed bottom-24 right-6 w-[360px] h-[480px] flex flex-col rounded-2xl shadow-2xl bg-white overflow-hidden border border-gray-200 z-50"
+            className="
+              fixed bottom-24 right-6 w-[360px] h-[480px]
+              sm:w-[360px] sm:h-[480px]
+              xs:w-[300px] xs:h-[420px]
+              max-[480px]:w-[95%] max-[480px]:h-[70vh] max-[480px]:right-2 max-[480px]:bottom-20
+              flex flex-col rounded-2xl shadow-2xl bg-white overflow-hidden border border-gray-200 z-50
+            "
           >
             <div className="flex justify-between items-center bg-blue-600 text-white px-4 py-2">
-              <span className="font-semibold text-base">🤖DevChill AI</span>
+              <span className="font-semibold text-base">🤖 DevChill AI</span>
               <FaTimes
                 className="cursor-pointer hover:text-gray-200"
                 onClick={() => setOpen(false)}
               />
             </div>
-
-            {/* Messages */}
             <div className="flex-1 p-3 space-y-2 overflow-y-auto bg-gray-50">
               <AnimatePresence>
                 {messages.map((m, idx) => (
@@ -132,8 +135,6 @@ export default function ChatBot() {
               </AnimatePresence>
               <div ref={chatEndRef}></div>
             </div>
-
-            {/* Input */}
             <div className="flex border-t border-gray-300 bg-white p-2">
               <input
                 className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:border-blue-500 text-black placeholder-gray-500"

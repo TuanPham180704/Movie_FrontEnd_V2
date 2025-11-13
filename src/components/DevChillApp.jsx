@@ -16,7 +16,8 @@ export default function DevChillApp() {
             Giao diện thân thiện, chất lượng HD, và đồng bộ tiến trình xem trên
             mọi thiết bị.
           </p>
-          <button className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium shadow-md transition">
+          <div className="flex gap-5">
+            <button className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium shadow-md transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-4 h-4"
@@ -27,6 +28,18 @@ export default function DevChillApp() {
             </svg>
             Tải cho Android
           </button>
+          <button className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium shadow-md transition">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              viewBox="0 0 512 512"
+              fill="currentColor"
+            >
+              <path d="M325.3 234.3 104.7 63.5c-4.8-3.8-11.7-.4-11.7 5.7v374.7c0 6.1 6.9 9.5 11.7 5.7l220.6-170.8c3.8-2.9 3.8-8.5 0-11.4z" />
+            </svg>
+            Tải cho IOS
+          </button>
+          </div>
         </div>
       </div>
     </div>
