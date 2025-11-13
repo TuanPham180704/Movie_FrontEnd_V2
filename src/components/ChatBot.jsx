@@ -81,7 +81,7 @@ export default function ChatBot() {
             "
           >
             <div className="flex justify-between items-center bg-blue-600 text-white px-4 py-2">
-              <span className="font-semibold text-base">🤖 DevChill AI</span>
+              <span className="font-semibold text-base">DevChill AI</span>
               <FaTimes
                 className="cursor-pointer hover:text-gray-200"
                 onClick={() => setOpen(false)}

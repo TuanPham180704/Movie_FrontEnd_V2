@@ -17,7 +17,7 @@ export default function SearchBox() {
     navigate(
       `/movies/search?keyword=${encodeURIComponent(search.trim())}&page=1`
     );
-    setKeyword("");
+    setSearch(" ");
   };
 
   return (
