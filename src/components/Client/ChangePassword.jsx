@@ -28,6 +28,7 @@ export default function ChangePassword({ isOpen, onClose, onSubmit }) {
           <input
             type="password"
             placeholder="Mật khẩu cũ"
+            id="old-password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
             className="p-2 rounded bg-[#1F2235] text-white outline-none"
@@ -36,6 +37,7 @@ export default function ChangePassword({ isOpen, onClose, onSubmit }) {
           <input
             type="password"
             placeholder="Mật khẩu mới"
+            id="new-password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             className="p-2 rounded bg-[#1F2235] text-white outline-none"
@@ -44,6 +46,7 @@ export default function ChangePassword({ isOpen, onClose, onSubmit }) {
           <input
             type="password"
             placeholder="Xác nhận mật khẩu mới"
+            id="confirm-password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="p-2 rounded bg-[#1F2235] text-white outline-none"
@@ -52,6 +55,7 @@ export default function ChangePassword({ isOpen, onClose, onSubmit }) {
           <div className="flex justify-end gap-2 mt-3">
             <button
               type="submit"
+              id="submit-change-password"
               className="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-400"
             >
               Đổi mật khẩu

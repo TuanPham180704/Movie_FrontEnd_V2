@@ -99,6 +99,7 @@ export default function Header() {
           {token ? (
             <div className="relative" ref={userMenuRef}>
               <button
+                id="user-menu-btn"
                 onClick={(e) => {
                   e.stopPropagation();
                   setOpenUserMenu((prev) => !prev);
@@ -110,7 +111,10 @@ export default function Header() {
               </button>
 
               {openUserMenu && (
-                <div className="absolute right-0 mt-2 w-44 bg-[#222] border border-gray-700 rounded-md shadow-lg py-2 z-50 animate-fadeIn">
+                <div
+                  id="user-menu-dropdown"
+                  className="absolute right-0 mt-2 w-44 bg-[#222] border border-gray-700 rounded-md shadow-lg py-2 z-50 animate-fadeIn"
+                >
                   <Link
                     to="/premium"
                     className="block px-4 py-2 text-sm bg-amber-400 hover:bg-blue-700"
@@ -123,6 +127,7 @@ export default function Header() {
                   </Link>
                   <Link
                     to="/profile"
+                    id="menu-profile"
                     className="block px-4 py-2 text-sm hover:bg-gray-700"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -142,6 +147,7 @@ export default function Header() {
                     Vé Đã Đặt
                   </Link>
                   <button
+                    id="menu-logout"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleLogout();

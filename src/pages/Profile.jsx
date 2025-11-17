@@ -142,15 +142,21 @@ export default function Profile() {
                   user.avatar_url ||
                   "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                 }
+                id="sidebar-avatar"
                 alt="avatar"
                 className="w-12 h-12 rounded-full object-cover"
               />
               <div>
-                <p className="font-semibold">{user.username}</p>
+                <p className="font-semibold " id="sidebar-username">
+                  {user.username}
+                </p>
                 {user.is_premium && (
                   <span className="text-yellow-400 text-sm">🌟 Premium</span>
                 )}
-                <p className="text-gray-400 text-sm pointer-events-none opacity-50 cursor-not-allowed">
+                <p
+                  className="text-gray-400 text-sm pointer-events-none opacity-50 cursor-not-allowed "
+                  id="sidebar-email"
+                >
                   {user.email}
                 </p>
               </div>
@@ -173,6 +179,7 @@ export default function Profile() {
                 <label className="block text-gray-400 mb-2">Email</label>
                 <input
                   type="email"
+                  id="email-input"
                   name="email"
                   value={formData.email}
                   readOnly
@@ -184,6 +191,7 @@ export default function Profile() {
                 <input
                   type="text"
                   name="username"
+                  id="username-input"
                   value={formData.username}
                   onChange={handleChange}
                   className="w-full bg-[#222] border border-gray-700 rounded-lg p-3"
@@ -200,6 +208,7 @@ export default function Profile() {
                       checked={formData.gender === "male"}
                       onChange={handleChange}
                       className="mr-1"
+                      id="gender-male"
                     />
                     Nam
                   </label>
@@ -211,6 +220,7 @@ export default function Profile() {
                       checked={formData.gender === "female"}
                       onChange={handleChange}
                       className="mr-1"
+                      id="gender-female"
                     />
                     Nữ
                   </label>
@@ -222,6 +232,7 @@ export default function Profile() {
                       checked={formData.gender === "unknown"}
                       onChange={handleChange}
                       className="mr-1"
+                      id="gender-unknown"
                     />
                     Không xác định
                   </label>
@@ -230,6 +241,7 @@ export default function Profile() {
               <button
                 type="submit"
                 className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-2 px-6 rounded-lg"
+                id="update-profile-btn"
               >
                 Cập nhật
               </button>
@@ -239,6 +251,7 @@ export default function Profile() {
                 <span
                   onClick={() => setShowChangePassword(true)}
                   className="text-yellow-400 cursor-pointer"
+                  id="change-password-link"
                 >
                   đây
                 </span>
@@ -251,6 +264,7 @@ export default function Profile() {
                   "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                 }
                 alt="avatar"
+                id="profile-avatar"
                 className="w-32 h-32 rounded-full object-cover"
               />
 
@@ -261,6 +275,7 @@ export default function Profile() {
                   accept="image/*"
                   onChange={handleAvatarChange}
                   className="hidden"
+                  id="avatar-upload"
                 />
               </label>
             </div>

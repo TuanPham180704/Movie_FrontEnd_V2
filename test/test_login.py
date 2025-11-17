@@ -1,14 +1,12 @@
-# test/test_login.py
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
-BASE_URL = "http://localhost:5173"  # sửa nếu cần
+BASE_URL = "http://localhost:5173" 
 
-# ----------------------
-# 11. Login thành công với email/password hợp lệ
-# ----------------------
+
 def test_login_success(driver):
     driver.get(f"{BASE_URL}/login")
     driver.find_element(By.ID, "email").send_keys("testuser1@gmail.com")
@@ -20,9 +18,6 @@ def test_login_success(driver):
     )
     assert "/" in driver.current_url
 
-# ----------------------
-# 12. Email sai → hiển thị message “User không tồn tại”
-# ----------------------
 def test_login_wrong_email(driver):
     driver.get(f"{BASE_URL}/login")
     driver.find_element(By.ID, "email").send_keys("wrongemail@gmail.com")
@@ -36,9 +31,6 @@ def test_login_wrong_email(driver):
     )
     assert error_msg.is_displayed()
 
-# ----------------------
-# 13. Password sai → hiển thị message “Sai mật khẩu”
-# ----------------------
 def test_login_wrong_password(driver):
     driver.get(f"{BASE_URL}/login")
     driver.find_element(By.ID, "email").send_keys("testuser1@gmail.com")
@@ -52,9 +44,7 @@ def test_login_wrong_password(driver):
     )
     assert error_msg.is_displayed()
 
-# ----------------------
-# 14. Email chưa đăng ký → message “User không tồn tại”
-# ----------------------
+
 def test_login_unregistered_email(driver):
     driver.get(f"{BASE_URL}/login")
     driver.find_element(By.ID, "email").send_keys("notregistered@gmail.com")
@@ -68,9 +58,6 @@ def test_login_unregistered_email(driver):
     )
     assert error_msg.is_displayed()
 
-# ----------------------
-# 15. Bỏ trống email → hiển thị message required
-# ----------------------
 def test_login_empty_email(driver):
     driver.get(f"{BASE_URL}/login")
     driver.find_element(By.ID, "password").send_keys("Abcd1234!")
@@ -83,9 +70,6 @@ def test_login_empty_email(driver):
     )
     assert error_msg.is_displayed()
 
-# ----------------------
-# 16. Bỏ trống password → hiển thị message required
-# ----------------------
 def test_login_empty_password(driver):
     driver.get(f"{BASE_URL}/login")
     driver.find_element(By.ID, "email").send_keys("testuser1@gmail.com")
@@ -98,9 +82,7 @@ def test_login_empty_password(driver):
     )
     assert error_msg.is_displayed()
 
-# ----------------------
-# 17. Bỏ trống cả email/password → hiển thị message required
-# ----------------------
+
 def test_login_empty_fields(driver):
     driver.get(f"{BASE_URL}/login")
     driver.find_element(By.CSS_SELECTOR, "button[type=submit]").click()
@@ -112,9 +94,6 @@ def test_login_empty_fields(driver):
     )
     assert len(error_msgs) > 0
 
-# ----------------------
-# 18. Show/Hide password hoạt động
-# ----------------------
 def test_login_show_hide_password(driver):
     driver.get(f"{BASE_URL}/login")
     password_input = driver.find_element(By.ID, "password")
@@ -129,9 +108,6 @@ def test_login_show_hide_password(driver):
     toggle.click()
     assert password_input.get_attribute("type") == "password"
 
-# ----------------------
-# 19. Login bằng phím Enter → redirect home đúng
-# ----------------------
 def test_login_enter_key(driver):
     driver.get(f"{BASE_URL}/login")
     driver.find_element(By.ID, "email").send_keys("testuser1@gmail.com")
@@ -142,9 +118,7 @@ def test_login_enter_key(driver):
     )
     assert "/" in driver.current_url
 
-# ----------------------
-# 20. Login xong → verify user profile icon/menu xuất hiện
-# ----------------------
+
 def test_login_profile_icon(driver):
     driver.get(f"{BASE_URL}/login")
     driver.find_element(By.ID, "email").send_keys("testuser1@gmail.com")
