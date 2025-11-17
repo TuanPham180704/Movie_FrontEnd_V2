@@ -96,6 +96,7 @@ export default function Register() {
             <div>
               <input
                 type="text"
+                id="username"
                 {...register("username")}
                 className={`w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none 
                   ${
@@ -114,6 +115,7 @@ export default function Register() {
             <div>
               <input
                 type="email"
+                id="email"
                 {...register("email")}
                 className={`w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none
                   ${
@@ -132,6 +134,7 @@ export default function Register() {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
+                id="password"
                 {...register("password")}
                 className={`w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none
                   ${
@@ -159,6 +162,7 @@ export default function Register() {
             <div className="relative">
               <input
                 type={showConfirm ? "text" : "password"}
+                id="confirmPassword"
                 {...register("confirmPassword")}
                 className={`w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none
                   ${

@@ -103,6 +103,7 @@ export default function Login() {
               <input
                 type="email"
                 {...register("email")}
+                id="email"
                 className={`w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none
                   ${
                     errors.email
@@ -125,6 +126,7 @@ export default function Login() {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
+                  id="password"
                   {...register("password")}
                   className={`w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none
                     ${
