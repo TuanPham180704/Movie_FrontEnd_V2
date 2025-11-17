@@ -6,22 +6,38 @@ import { setToken } from "../utils/auth";
 import { toast } from "react-toastify";
 import logoWeb from "../assets/logoWeb.png";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "../schemas/auth";
+
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const [showPassword, setShowPassword] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const mutation = useMutation({
     mutationFn: loginApi,
     onSuccess(data) {
       const token = data?.user?.token;
       const user = data?.user?.user;
+
       if (token) {
         setToken(token);
         qc.invalidateQueries({ queryKey: ["me"] });
+
         toast.success(`Chào mừng ${user?.username || "bạn"} quay lại!`);
+
         if (user.role === "admin") {
           navigate("/admin", { replace: true });
         } else {
@@ -32,14 +48,12 @@ export default function Login() {
       }
     },
     onError(err) {
-      console.error(err);
       toast.error(err?.response?.data?.error || "Login failed");
     },
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    mutation.mutate({ email, password });
+  const onSubmit = (data) => {
+    mutation.mutate(data);
   };
 
   return (
@@ -61,10 +75,12 @@ export default function Login() {
             <p className="text-gray-300 text-sm">Phim hay cả rổ</p>
           </div>
         </div>
-
         <div className="flex-1 bg-[#0b1220] p-8 text-white">
           <div className="flex justify-end">
-            <button className="text-gray-400 hover:text-white text-xl font-bold">
+            <button
+              onClick={() => navigate("/")}
+              className="text-gray-400 hover:text-white text-xl font-bold"
+            >
               ✕
             </button>
           </div>
@@ -77,61 +93,71 @@ export default function Login() {
             </Link>
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            className="space-y-4"
+          >
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm text-gray-300 mb-1"
-              >
-                Email
-              </label>
+              <label className="block text-sm text-gray-300 mb-1">Email</label>
               <input
                 type="email"
-                id="email"
-                className="w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                {...register("email")}
+                className={`w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none
+                  ${
+                    errors.email
+                      ? "ring-2 ring-red-500"
+                      : "focus:ring-2 focus:ring-yellow-400"
+                  }`}
                 placeholder="Nhập email của bạn"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
               />
+              {errors.email && (
+                <p className="text-sm text-red-400 mt-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm text-gray-300 mb-1"
-              >
+              <label className="block text-sm text-gray-300 mb-1">
                 Mật khẩu
               </label>
+
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  id="password"
-                  className="w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  {...register("password")}
+                  className={`w-full p-3 rounded-lg bg-[#1e293b] text-gray-100 focus:outline-none
+                    ${
+                      errors.password
+                        ? "ring-2 ring-red-500"
+                        : "focus:ring-2 focus:ring-yellow-400"
+                    }`}
                   placeholder="Nhập mật khẩu"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
                 />
+
                 <span
-                  className="absolute right-3 top-3 text-gray-400 cursor-pointer select-none"
-                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-xl cursor-pointer select-none"
+                  onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? "🙈" : "👁"}
                 </span>
               </div>
-            </div>
 
-            <div className="flex items-center gap-2 text-sm text-gray-300">
-              <input type="checkbox" id="check" className="accent-yellow-400" />
-              <label htmlFor="check">Xác minh bạn là con người</label>
+              {errors.password && (
+                <p className="text-sm text-red-400 mt-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             <button
               type="submit"
-              disabled={mutation.isLoading}
+              disabled={mutation.isLoading || isSubmitting}
               className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg transition"
             >
-              {mutation.isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+              {mutation.isLoading || isSubmitting
+                ? "Đang đăng nhập..."
+                : "Đăng nhập"}
             </button>
 
             <div className="text-center mt-1">
