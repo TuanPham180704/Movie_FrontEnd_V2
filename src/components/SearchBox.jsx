@@ -28,6 +28,7 @@ export default function SearchBox() {
       <FaSearch className="text-gray-400 mr-2 text-sm" />
       <input
         type="text"
+        id="search"
         placeholder="Tìm kiếm phim..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
