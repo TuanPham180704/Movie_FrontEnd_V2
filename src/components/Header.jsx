@@ -87,19 +87,16 @@ export default function Header() {
             title="Thể loại"
             items={genres}
             basePath="/movies/genres"
-            id="dropdown-genre"
           />
           <DropdownHover
             title="Quốc gia"
             items={countries}
             basePath="/movies/countries"
-            id="dropdown-country"
           />
           <DropdownHover
             title="Năm"
             items={years.map((y) => ({ name: y, slug: y }))}
             basePath="/movies/years"
-            id="dropdown-year"
           />
 
           <Link
@@ -127,7 +124,6 @@ export default function Header() {
 
               {openUserMenu && (
                 <div
-                  id="user-menu-dropdown"
                   className="absolute right-0 mt-2 w-44 bg-[#222] border border-gray-700 rounded-md shadow-lg py-2 z-50 animate-fadeIn"
                 >
                   <Link

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +15,7 @@ export default function ForgotPassword() {
     try {
       await forgotPasswordApi(email);
       toast.success("Gửi email khôi phục thành công!");
-      navigate("/login"); 
+      navigate("/login");
     } catch (err) {
       toast.error(err.response?.data?.error || "Lỗi khi gửi yêu cầu!");
     } finally {
@@ -34,7 +34,7 @@ export default function ForgotPassword() {
         <p className="text-sm text-gray-300 mb-3">
           Nếu bạn đã có tài khoản,{" "}
           <span
-            onClick={() => navigate("/login")} 
+            onClick={() => navigate("/login")}
             className="text-yellow-400 cursor-pointer"
           >
             đăng nhập
@@ -44,6 +44,7 @@ export default function ForgotPassword() {
         <form onSubmit={handleSubmit}>
           <input
             type="email"
+            id="email"
             className="w-full p-2 rounded bg-[#2a2d3e] text-sm mb-4 outline-none"
             placeholder="Email đăng ký"
             value={email}
