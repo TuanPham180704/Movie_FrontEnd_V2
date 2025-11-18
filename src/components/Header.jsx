@@ -61,13 +61,25 @@ export default function Header() {
         </div>
 
         <nav className="hidden lg:flex items-center gap-6 text-sm grow justify-center relative">
-          <Link to="/movies/list/phim-le" className="hover:text-yellow-400">
+          <Link
+            to="/movies/list/phim-le"
+            id="link-phim-le"
+            className="hover:text-yellow-400"
+          >
             Phim Lẻ
           </Link>
-          <Link to="/movies/list/phim-bo" className="hover:text-yellow-400">
+          <Link
+            to="/movies/list/phim-bo"
+            id="link-phim-bo"
+            className="hover:text-yellow-400"
+          >
             Phim Bộ
           </Link>
-          <Link to="/movies/list/hoat-hinh" className="hover:text-yellow-400">
+          <Link
+            to="/movies/list/hoat-hinh"
+            id="link-hoat-hinh"
+            className="hover:text-yellow-400"
+          >
             Hoạt Hình
           </Link>
 
@@ -75,16 +87,19 @@ export default function Header() {
             title="Thể loại"
             items={genres}
             basePath="/movies/genres"
+            id="dropdown-genre"
           />
           <DropdownHover
             title="Quốc gia"
             items={countries}
             basePath="/movies/countries"
+            id="dropdown-country"
           />
           <DropdownHover
             title="Năm"
             items={years.map((y) => ({ name: y, slug: y }))}
             basePath="/movies/years"
+            id="dropdown-year"
           />
 
           <Link
