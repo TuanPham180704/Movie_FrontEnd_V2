@@ -9,37 +9,20 @@ import ChatBot from "../components/ChatBot";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [newMovies, setNewMovies] = useState([]);
   const [chinaMovies, setChinaMovies] = useState([]);
   const [koreaMovies, setKoreaMovies] = useState([]);
   const [vietNamMovies, setVietNamMovies] = useState([]);
   const [cartoonMovies, setCartoonMovies] = useState([]);
-  const [japanMovies, setJapanMovies] = useState([]);
-  const [ukMovies, setUkMovies] = useState([]);
-  const [taiwanese, setTaiwanese] = useState([]);
   useEffect(() => {
     const fetchAll = async () => {
       try {
         setLoading(true);
 
-        const [
-          newData,
-          chinaData,
-          koreaData,
-          vnData,
-          cartoonData,
-          japanData,
-          ukData,
-          taiwanese,
-        ] = await Promise.all([
-          movieApi.getNew(1, "v3"),
+        const [chinaData, koreaData, vnData, cartoonData] = await Promise.all([
           movieApi.getCountryDetail("trung-quoc", 1),
           movieApi.getCountryDetail("han-quoc", 1),
           movieApi.getCountryDetail("viet-nam", 1),
           movieApi.getGenreDetail("tre-em", 1),
-          movieApi.getCountryDetail("nhat-ban", 1),
-          movieApi.getCountryDetail("anh", 1),
-          movieApi.getCountryDetail("dai-loan", 1),
         ]);
 
         const limit = 10;
@@ -47,14 +30,10 @@ export default function Home() {
           data?.items?.slice(0, limit) ||
           data?.data?.items?.slice(0, limit) ||
           [];
-        setNewMovies(safeSlice(newData));
         setChinaMovies(safeSlice(chinaData));
         setKoreaMovies(safeSlice(koreaData));
         setVietNamMovies(safeSlice(vnData));
         setCartoonMovies(safeSlice(cartoonData));
-        setJapanMovies(safeSlice(japanData));
-        setUkMovies(safeSlice(ukData));
-        setTaiwanese(safeSlice(taiwanese));
       } catch (error) {
         console.error("Lỗi khi load phim:", error);
       } finally {
@@ -66,13 +45,9 @@ export default function Home() {
   }, []);
 
   const sections = [
-    { title: "Phim Mới", data: newMovies },
     { title: "Phim Trung Quốc", data: chinaMovies },
     { title: "Phim Hàn Quốc", data: koreaMovies },
     { title: "Phim Việt Nam", data: vietNamMovies },
-    { title: "Phim Nhật Bản", data: japanMovies },
-    { title: "Phim Anh", data: ukMovies },
-    { title: "Phim Đài Loan", data: taiwanese },
     { title: "Phim Trẻ Em", data: cartoonMovies },
   ];
 
@@ -94,15 +69,9 @@ export default function Home() {
                     ? "/movies/countries/han-quoc"
                     : section.title.includes("Việt Nam")
                     ? "/movies/countries/viet-nam"
-                    : section.title.includes("Nhật Bản")
-                    ? "/movies/countries/nhat-ban"
-                    : section.title.includes("Anh")
-                    ? "/movies/countries/anh"
-                    : section.title.includes("Đài Loan")
-                    ? "/movies/countries/dai-loan"
                     : section.title.includes("Trẻ Em")
                     ? "/movies/genres/tre-em"
-                    : "/movies/new?page=1&version=v2"
+                    : "/"
                 }
                 className="text-sm text-gray-400 hover:text-red-400 transition"
               >
