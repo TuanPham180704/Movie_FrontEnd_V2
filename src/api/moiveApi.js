@@ -63,7 +63,7 @@ export const movieApi = {
       }
       return data?.items || data?.result || [];
     } catch (error) {
-      console.error("❌ Search API error:", error);
+      console.error(" Search API error:", error);
       return [];
     }
   },
