@@ -20,8 +20,8 @@ export default function Register() {
       navigate("/login");
     },
     onError(err) {
-      console.error(err);
-      toast.error(err?.response?.data?.error || "Đăng ký thất bại");
+        console.error(err);
+        toast.error(err?.response?.data?.error || "Đăng ký thất bại");
     },
   });
 

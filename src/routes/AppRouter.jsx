@@ -16,7 +16,7 @@ import ResetPassword from "../components/Client/ResetPassword";
 
 import AdminLayout from "../layouts/AdminLayout";
 import Dashboard from "../pages/Admin/Dashboard";
-
+import CustomerList from "../components/Admin/CustomerList";
 export default function AppRouter() {
   return (
     <>
@@ -49,6 +49,7 @@ export default function AppRouter() {
           <Route element={<ProtectedRoute roles={["admin"]} />}>
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<Dashboard />} />
+              <Route path="/admin/customers" element={<CustomerList />} />
             </Route>
           </Route>
           <Route element={<NotFound />} path="*" />

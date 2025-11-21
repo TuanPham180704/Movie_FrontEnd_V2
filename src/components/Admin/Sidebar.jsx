@@ -71,9 +71,9 @@ export default function Sidebar() {
             <FaFileAlt /> Quản lý Báo Cáo
           </Link>
           <Link
-            to="/khach-hang"
+            to="/admin/customers"
             className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/khach-hang"
+              "/admin/customers"
             )}`}
           >
             <FaUsers /> Quản lý Khách hàng
