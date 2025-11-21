@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { updateUser } from "../../api/userApi";
+import { updateUser } from "../../../api/userApi";
 
 export default function CustomerModal({
   user,

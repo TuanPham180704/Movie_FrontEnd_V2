@@ -4,11 +4,11 @@ import {
   deleteUser,
   updateUser,
   getUserById,
-} from "../../api/userApi";
+} from "../../../api/userApi";
 
-import CustomerModal from "../../components/Admin/CustomerModal";
-import LockModal from "../../components/Admin/LockModal";
-import DeleteModal from "../../components/Admin/DeleteModal";
+import CustomerModal from "./CustomerModal";
+import LockModal from "./LockModal";
+import DeleteModal from "./DeleteModal";
 
 export default function CustomerList() {
   const [users, setUsers] = useState([]);

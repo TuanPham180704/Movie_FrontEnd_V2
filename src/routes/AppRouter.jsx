@@ -16,7 +16,7 @@ import ResetPassword from "../components/Client/ResetPassword";
 
 import AdminLayout from "../layouts/AdminLayout";
 import Dashboard from "../pages/Admin/Dashboard";
-import CustomerList from "../components/Admin/CustomerList";
+import CustomerList from "../components/Admin/Users/CustomerList";
 export default function AppRouter() {
   return (
     <>
