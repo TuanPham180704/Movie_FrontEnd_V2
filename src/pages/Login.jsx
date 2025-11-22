@@ -29,8 +29,8 @@ export default function Login() {
   const mutation = useMutation({
     mutationFn: loginApi,
     onSuccess(data) {
-      const token = data?.user?.token;
-      const user = data?.user?.user;
+      const token = data?.token;
+      const user = data?.user;
 
       if (token) {
         setToken(token);
