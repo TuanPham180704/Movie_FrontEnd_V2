@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import {
   getMovies,
   createMovie,
@@ -7,6 +7,7 @@ import {
 } from "../../../api/movie_apiadmin";
 import MovieModal from "./MovieModal";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import Pagination from "../Pagination"; // Giả sử bạn đã có component Pagination
 import {
   AiOutlineEdit,
   AiOutlineDelete,
@@ -14,26 +15,25 @@ import {
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import CSS cho toast
+import { toast } from "react-toastify";
 
 export default function MovieList() {
   const [movies, setMovies] = useState([]);
-  const [filteredMovies, setFilteredMovies] = useState([]); // State cho tìm kiếm client-side tạm thời
   const [searchTerm, setSearchTerm] = useState("");
-
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [readOnly, setReadOnly] = useState(false);
 
-  // Hàm lấy danh sách phim
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 5; // Số phim hiển thị mỗi trang
+
   const fetchMovies = async () => {
     try {
-      // Nếu API hỗ trợ search thì truyền searchTerm vào đây
-      const data = await getMovies(1, 20, searchTerm);
-      setMovies(data.movies || []); // Fallback array rỗng nếu data null
-      setFilteredMovies(data.movies || []);
+      const data = await getMovies(page, limit, searchTerm);
+      setMovies(data.movies || []);
+      setTotalPages(data.totalPages || 1);
     } catch (err) {
       console.error(err);
       toast.error("Lỗi khi tải danh sách phim!");
@@ -42,18 +42,7 @@ export default function MovieList() {
 
   useEffect(() => {
     fetchMovies();
-  }, []); // Reload khi component mount
-
-  // Xử lý tìm kiếm (Client-side filter nếu API chưa hỗ trợ search)
-  useEffect(() => {
-    const lowerTerm = searchTerm.toLowerCase();
-    const results = movies.filter(
-      (movie) =>
-        movie.title.toLowerCase().includes(lowerTerm) ||
-        movie.category.toLowerCase().includes(lowerTerm)
-    );
-    setFilteredMovies(results);
-  }, [searchTerm, movies]);
+  }, [page, searchTerm]); // reload khi page hoặc searchTerm thay đổi
 
   const handleAdd = () => {
     setSelectedMovie(null);
@@ -110,12 +99,9 @@ export default function MovieList() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md">
-        {/* Header & Search & Add Button */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <h2 className="text-2xl font-bold text-gray-800">Quản lý Phim</h2>
-
           <div className="flex items-center gap-3 w-full md:w-auto">
-            {/* Thanh tìm kiếm */}
             <div className="relative flex-1 md:w-64">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
                 <AiOutlineSearch size={20} />
@@ -125,10 +111,12 @@ export default function MovieList() {
                 placeholder="Tìm kiếm phim..."
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setPage(1); // reset về trang 1 khi search
+                  setSearchTerm(e.target.value);
+                }}
               />
             </div>
-
             <button
               onClick={handleAdd}
               className="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-sm font-medium whitespace-nowrap"
@@ -138,7 +126,6 @@ export default function MovieList() {
           </div>
         </div>
 
-        {/* Table */}
         <div className="overflow-x-auto rounded-lg border border-gray-200">
           <table className="w-full text-sm text-left text-gray-600">
             <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b border-gray-200">
@@ -153,8 +140,8 @@ export default function MovieList() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredMovies.length > 0 ? (
-                filteredMovies.map((movie) => (
+              {movies.length > 0 ? (
+                movies.map((movie) => (
                   <tr
                     key={movie.id}
                     className="hover:bg-gray-50 transition-colors"
@@ -227,6 +214,13 @@ export default function MovieList() {
               )}
             </tbody>
           </table>
+          <div className="absolute bottom-4 left-0 w-full flex justify-center">
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          </div>
         </div>
       </div>
 

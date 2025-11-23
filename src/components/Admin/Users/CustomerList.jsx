@@ -5,7 +5,7 @@ import {
   updateUser,
   getUserById,
 } from "../../../api/userApi";
-
+import { AiOutlineEye, AiOutlineLock, AiOutlineDelete } from "react-icons/ai";
 import CustomerModal from "./CustomerModal";
 import LockModal from "./LockModal";
 import DeleteModal from "./DeleteModal";
@@ -144,7 +144,7 @@ export default function CustomerList() {
                     className="p-2 border rounded"
                     onClick={() => handleOpenDetail(u.id)}
                   >
-                    👁
+                    <AiOutlineEye size={18} className="text-blue-600" />
                   </button>
 
                   <button
@@ -158,7 +158,12 @@ export default function CustomerList() {
                       })
                     }
                   >
-                    🔒
+                    <AiOutlineLock
+                      size={18}
+                      className={
+                        u.is_active ? "text-red-500" : "text-green-500"
+                      }
+                    />
                   </button>
 
                   <button
@@ -170,7 +175,7 @@ export default function CustomerList() {
                       })
                     }
                   >
-                    🗑
+                    <AiOutlineDelete size={18} className="text-red-500" />
                   </button>
                 </td>
               </tr>

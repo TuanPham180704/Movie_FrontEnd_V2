@@ -36,11 +36,11 @@ export default function CustomerModal({
   const handleSubmit = async () => {
     try {
       const payload = { ...form };
-      if (!payload.password) delete payload.password; // nếu không nhập password thì không gửi
-      await updateUser(user.id, payload); // gọi API cập nhật
+      if (!payload.password) delete payload.password; 
+      await updateUser(user.id, payload); 
       toast.success("Cập nhật thông tin thành công");
-      onReload(); // load lại danh sách
-      onClose(); // đóng modal
+      onReload(); 
+      onClose(); 
     } catch (error) {
       console.error(error);
       toast.error("Cập nhật thất bại");
