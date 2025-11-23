@@ -10,7 +10,7 @@ import CustomerModal from "./CustomerModal";
 import LockModal from "./LockModal";
 import DeleteModal from "./DeleteModal";
 import Pagination from "../Pagination";
-
+import { toast } from "react-toastify";
 export default function CustomerList() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
@@ -49,14 +49,24 @@ export default function CustomerList() {
   };
 
   const handleDelete = async (id) => {
-    await deleteUser(id);
-    loadData();
+    try {
+      await deleteUser(id);
+      toast.success("Xóa thành công");
+      loadData();
+    } catch (error) {
+      toast.error("Xóa thất bại");
+    }
   };
 
   const handleLock = async (id, isActive) => {
-    await updateUser(id, { is_active: isActive });
-    setLockUserData(null);
-    loadData();
+    try {
+      await updateUser(id, { is_active: isActive });
+      toast.success(isActive ? "Mở khóa thành công" : "Khóa thành công");
+      setLockUserData(null);
+      loadData();
+    } catch (error) {
+      toast.error("Có lỗi khi cập nhật trạng thái");
+    }
   };
 
   return (
