@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaChartPie,
   FaFilm,
@@ -11,13 +11,23 @@ import {
   FaCog,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { logout } from "../../utils/auth";
+import { toast } from "react-toastify";
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const active = (path) =>
     location.pathname === path
       ? "bg-purple-600 text-white"
       : "text-gray-300 hover:bg-purple-700 hover:text-white";
+
+  const handleLogout = () => {
+    logout();
+    toast.info("Đã Đăng Xuất!");
+    navigate("/login");
+  };
 
   return (
     <div className="w-64 bg-[#101322] h-screen flex flex-col justify-between">
@@ -97,13 +107,16 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      <div className="flex items-center justify-between bg-[#191d2e] mx-4 mb-4 p-3 rounded-lg">
+      <div
+        className="flex items-center justify-between bg-[#191d2e] mx-4 mb-4 p-3 rounded-lg cursor-pointer"
+        onClick={handleLogout}
+      >
         <div className="flex items-center gap-2">
           <div className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
             AD
           </div>
           <div>
-            <p className="text-white text-sm font-medium">Admin User</p>
+            <p className="text-white text-sm font-medium">Admin</p>
             <p className="text-gray-400 text-xs">Quản trị viên</p>
           </div>
         </div>
