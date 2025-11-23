@@ -37,7 +37,7 @@ export default function Sidebar() {
             <FaChartPie /> Tổng quan
           </Link>
           <Link
-            to="/phim"
+            to="/admin/movies"
             className={`flex items-center gap-3 px-6 py-3 ${active("/phim")}`}
           >
             <FaFilm /> Quản lý phim

@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AppLayout from "../layouts/AppLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AppLayout from "../layouts/AppLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -17,6 +17,7 @@ import ResetPassword from "../components/Client/ResetPassword";
 import AdminLayout from "../layouts/AdminLayout";
 import Dashboard from "../pages/Admin/Dashboard";
 import CustomerList from "../components/Admin/Users/CustomerList";
+import MovieListAmin from "../components/Admin/Movie/MovieList";
 export default function AppRouter() {
   return (
     <>
@@ -50,6 +51,7 @@ export default function AppRouter() {
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/customers" element={<CustomerList />} />
+              <Route path="/admin/movies" element={<MovieListAmin />} />
             </Route>
           </Route>
           <Route element={<NotFound />} path="*" />
