@@ -9,10 +9,14 @@ import {
 import CustomerModal from "./CustomerModal";
 import LockModal from "./LockModal";
 import DeleteModal from "./DeleteModal";
+import Pagination from "../Pagination";
 
 export default function CustomerList() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const [selectedUser, setSelectedUser] = useState(null);
   const [lockUserData, setLockUserData] = useState(null);
   const [deleteUserData, setDeleteUserData] = useState(null);
@@ -20,8 +24,9 @@ export default function CustomerList() {
 
   const loadData = async () => {
     try {
-      const data = await getUsers(search);
-      setUsers(data);
+      const result = await getUsers({ page, limit: 5, search });
+      setUsers(result.data);
+      setTotalPages(result.totalPages);
     } catch (error) {
       console.error("Lỗi load users:", error);
     }
@@ -29,7 +34,7 @@ export default function CustomerList() {
 
   useEffect(() => {
     loadData();
-  }, [search]);
+  }, [page, search]);
 
   const handleOpenDetail = async (id) => {
     const data = await getUserById(id);
@@ -65,18 +70,11 @@ export default function CustomerList() {
         <input
           className="border rounded px-3 py-2 w-96"
           placeholder="Tìm kiếm theo tên hoặc email…"
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-        <button
-          className="bg-violet-600 text-white px-4 py-2 rounded"
-          onClick={() => {
-            setSelectedUser(null);
-            setIsEdit(true);
+          onChange={(e) => {
+            setPage(1);
+            setSearch(e.target.value);
           }}
-        >
-          + Thêm khách hàng mới
-        </button>
+        />
       </div>
 
       <div className="bg-white rounded shadow">
@@ -169,8 +167,14 @@ export default function CustomerList() {
             ))}
           </tbody>
         </table>
+        <div className="absolute bottom-4 left-0 w-full flex justify-center">
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
       </div>
-
       {selectedUser && (
         <CustomerModal
           user={selectedUser}
@@ -188,6 +192,7 @@ export default function CustomerList() {
           onSubmit={handleLock}
         />
       )}
+
       {deleteUserData && (
         <DeleteModal
           isOpen={true}
