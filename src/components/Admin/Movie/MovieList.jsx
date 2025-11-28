@@ -7,7 +7,8 @@ import {
 } from "../../../api/movie_apiadmin";
 import MovieModal from "./MovieModal";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
-import Pagination from "../Pagination"; // Giả sử bạn đã có component Pagination
+import Pagination from "../Pagination";
+import ExportCSV from "../../common/ExportCSV";
 import {
   AiOutlineEdit,
   AiOutlineDelete,
@@ -27,7 +28,7 @@ export default function MovieList() {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 5; // Số phim hiển thị mỗi trang
+  const limit = 5;
 
   const fetchMovies = async () => {
     try {
@@ -42,7 +43,7 @@ export default function MovieList() {
 
   useEffect(() => {
     fetchMovies();
-  }, [page, searchTerm]); // reload khi page hoặc searchTerm thay đổi
+  }, [page, searchTerm]);
 
   const handleAdd = () => {
     setSelectedMovie(null);
@@ -95,6 +96,13 @@ export default function MovieList() {
       toast.error("Lỗi khi xóa phim!");
     }
   };
+  const csvData = movies.map((m) => ({
+    title: m.title,
+    category: m.category,
+    duration: m.duration,
+    status: m.is_offline ? "Đang chiếu" : "Sắp chiếu",
+    rating: m.rating,
+  }));
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -112,7 +120,7 @@ export default function MovieList() {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={searchTerm}
                 onChange={(e) => {
-                  setPage(1); // reset về trang 1 khi search
+                  setPage(1);
                   setSearchTerm(e.target.value);
                 }}
               />
@@ -123,6 +131,11 @@ export default function MovieList() {
             >
               <AiOutlinePlus size={18} /> Thêm phim
             </button>
+            <ExportCSV
+              data={csvData}
+              fields={["title", "category", "duration", "status", "rating"]}
+              fileName="DanhSachPhim"
+            />
           </div>
         </div>
 

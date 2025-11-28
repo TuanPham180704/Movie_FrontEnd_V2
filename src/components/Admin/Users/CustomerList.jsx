@@ -10,6 +10,7 @@ import CustomerModal from "./CustomerModal";
 import LockModal from "./LockModal";
 import DeleteModal from "./DeleteModal";
 import Pagination from "../Pagination";
+import ExportCSV from "../../common/ExportCSV";
 import { toast } from "react-toastify";
 export default function CustomerList() {
   const [users, setUsers] = useState([]);
@@ -68,6 +69,14 @@ export default function CustomerList() {
       toast.error("Có lỗi khi cập nhật trạng thái");
     }
   };
+  const csvFields = ["id", "username", "email", "gender", "is_active"];
+  const csvData = users.map((u) => ({
+    id: u.id,
+    username: u.username,
+    email: u.email,
+    gender: u.gender,
+    status: u.is_active ? "Hoạt động" : "Bị khóa",
+  }));
 
   return (
     <div className="p-6">
@@ -84,6 +93,11 @@ export default function CustomerList() {
             setPage(1);
             setSearch(e.target.value);
           }}
+        />
+        <ExportCSV
+          data={csvData}
+          fields={["id", "username", "email", "gender", "status"]}
+          fileName="DanhSachKhachHang"
         />
       </div>
 
