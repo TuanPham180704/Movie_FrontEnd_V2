@@ -99,7 +99,6 @@ export default function TicketManagement() {
     <div className="p-6">
       <div className="flex flex-col md:flex-row justify-between mb-4 space-y-2 md:space-y-0">
         <h1 className="text-2xl font-bold">Quản Lý Đặt Vé</h1>
-
         <div className="flex space-x-2">
           <input
             type="text"

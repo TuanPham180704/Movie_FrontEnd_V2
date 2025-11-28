@@ -129,6 +129,9 @@ export default function MovieList() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold mb-2">Quản Lí Phim</h1>
+      <p className="text-gray-500 mb-4">
+        Quản lý phim chiếu tại các cụm rạp trên toàn quốc
+      </p>
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-3">
         <input
           type="text"
