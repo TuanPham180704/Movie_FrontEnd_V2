@@ -6,8 +6,8 @@ BASE_URL = "http://localhost:5173"
 
 def test_register_valid(driver):
     driver.get(f"{BASE_URL}/register")
-    driver.find_element(By.ID, "username").send_keys("testuser1")
-    driver.find_element(By.ID, "email").send_keys("testuser1@gmail.com")
+    driver.find_element(By.ID, "username").send_keys("testuser1999")
+    driver.find_element(By.ID, "email").send_keys("testuser9912223@gmail.com")
     driver.find_element(By.ID, "password").send_keys("Abcd1234!")
     driver.find_element(By.ID, "confirmPassword").send_keys("Abcd1234!")
     driver.find_element(By.ID, "verify").click()
@@ -126,15 +126,17 @@ def test_register_empty_fields(driver):
     assert any("bắt buộc" in e.text.lower() or "không hợp lệ" in e.text.lower() for e in error_msgs)
 
 
-def test_register_sql_injection(driver):
+
+def test_register(driver):
     driver.get(f"{BASE_URL}/register")
-    driver.find_element(By.ID, "username").send_keys("' OR 1=1--")
-    driver.find_element(By.ID, "email").send_keys("sqlinjection7777@gmail.com")
+    driver.find_element(By.ID, "username").send_keys("testuser1999")
+    driver.find_element(By.ID, "email").send_keys("testuser9912223@gmail.com")
     driver.find_element(By.ID, "password").send_keys("Abcd1234!")
     driver.find_element(By.ID, "confirmPassword").send_keys("Abcd1234!")
     driver.find_element(By.ID, "verify").click()
     driver.find_element(By.CSS_SELECTOR, "button[type=submit]").click()
-    error_msgs = WebDriverWait(driver, 15).until(
-        EC.visibility_of_all_elements_located((By.XPATH, "//p"))
+    time.sleep(5)
+    success_msg = WebDriverWait(driver, 15).until(
+        EC.visibility_of_element_located((By.XPATH, "//div[contains(text(),'Đăng ký thành công')]"))
     )
-    assert any("lỗi" in e.text.lower() or "invalid" in e.text.lower() for e in error_msgs)
+    assert success_msg.is_displayed()

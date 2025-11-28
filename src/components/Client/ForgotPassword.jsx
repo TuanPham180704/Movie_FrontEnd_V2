@@ -17,7 +17,7 @@ export default function ForgotPassword() {
       toast.success("Gửi email khôi phục thành công!");
       navigate("/login");
     } catch (err) {
-      toast.error(err.response?.data?.error || "Lỗi khi gửi yêu cầu!");
+      // toast.error(err.response?.data?.error || "Lỗi khi gửi yêu cầu!");
     } finally {
       setLoading(false);
     }

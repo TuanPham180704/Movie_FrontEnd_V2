@@ -10,8 +10,8 @@ BASE_URL = "http://localhost:5173"
 @pytest.fixture
 def login(driver):
     driver.get(f"{BASE_URL}/login")
-    driver.find_element(By.ID, "email").send_keys("testuser1@gmail.com")
-    driver.find_element(By.ID, "password").send_keys("NewPass123!")  
+    driver.find_element(By.ID, "email").send_keys("nguyenthilananh1902@gmail.com")
+    driver.find_element(By.ID, "password").send_keys("lananh1902@")  
     driver.find_element(By.CSS_SELECTOR, "button[type=submit]").click()
     WebDriverWait(driver, 20).until(EC.url_contains("/profile"))
     return driver
