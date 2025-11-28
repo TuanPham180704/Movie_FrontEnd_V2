@@ -16,8 +16,9 @@ import ResetPassword from "../components/Client/ResetPassword";
 
 import AdminLayout from "../layouts/AdminLayout";
 import Dashboard from "../pages/Admin/Dashboard";
-import CustomerList from "../components/Admin/Users/CustomerList";
-import MovieListAmin from "../components/Admin/Movie/MovieList";
+import CustomerList from "../pages/Admin/CustomerList";
+import MovieListAmin from "../pages/Admin/MovieList"
+import TicketManagement from "../pages/Admin/TicketManagement";
 export default function AppRouter() {
   return (
     <>
@@ -52,6 +53,7 @@ export default function AppRouter() {
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/customers" element={<CustomerList />} />
               <Route path="/admin/movies" element={<MovieListAmin />} />
+              <Route path="/admin/tickets" element={<TicketManagement />} />
             </Route>
           </Route>
           <Route element={<NotFound />} path="*" />

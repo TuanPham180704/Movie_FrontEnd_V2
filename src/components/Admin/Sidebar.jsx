@@ -53,7 +53,7 @@ export default function Sidebar() {
             <FaFilm /> Quản lý phim
           </Link>
           <Link
-            to="/dat-ve"
+            to="/admin/tickets"
             className={`flex items-center gap-3 px-6 py-3 ${active("/dat-ve")}`}
           >
             <FaTicketAlt /> Quản lý Đặt vé

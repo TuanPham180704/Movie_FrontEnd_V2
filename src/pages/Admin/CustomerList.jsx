@@ -4,13 +4,13 @@ import {
   deleteUser,
   updateUser,
   getUserById,
-} from "../../../api/userApi";
+} from "../../api/userApi";
 import { AiOutlineEye, AiOutlineLock, AiOutlineDelete } from "react-icons/ai";
-import CustomerModal from "./CustomerModal";
-import LockModal from "./LockModal";
-import DeleteModal from "./DeleteModal";
-import Pagination from "../Pagination";
-import ExportCSV from "../../common/ExportCSV";
+import CustomerModal from "../../components/Admin/Users/CustomerModal";
+import LockModal from "../../components/Admin/Users/LockModal"
+import DeleteModal from "../../components/Admin/Users/DeleteModal"
+import Pagination from "../../components/Pagination";
+import ExportCSV from "../../components/common/ExportCSV";
 import { toast } from "react-toastify";
 export default function CustomerList() {
   const [users, setUsers] = useState([]);

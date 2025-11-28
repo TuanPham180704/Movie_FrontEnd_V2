@@ -4,11 +4,11 @@ import {
   createMovie,
   updateMovie,
   deleteMovie,
-} from "../../../api/movie_apiadmin";
-import MovieModal from "./MovieModal";
-import ConfirmDeleteModal from "./ConfirmDeleteModal";
-import Pagination from "../Pagination";
-import ExportCSV from "../../common/ExportCSV";
+} from "../../api/movie_apiadmin";
+import MovieModal from "../../components/Admin/Movie/MovieModal";
+import ConfirmDeleteModal from "../../components/Admin/Movie/ConfirmDeleteModal";
+import Pagination from "../../components/Pagination";
+import ExportCSV from "../../components/common/ExportCSV";
 import {
   AiOutlineEdit,
   AiOutlineDelete,
