@@ -35,7 +35,7 @@ export default function Sidebar() {
         <div className="flex items-center gap-2 p-6">
           <div>
             <h1 className="text-white text-lg font-semibold">🎬 DevChill</h1>
-            <p className="text-gray-400 text-sm">Quản lý rạp phim</p>
+            <p className="text-gray-400 text-sm">Quản lý Rạp Phim</p>
           </div>
         </div>
 
@@ -50,13 +50,13 @@ export default function Sidebar() {
             to="/admin/movies"
             className={`flex items-center gap-3 px-6 py-3 ${active("/phim")}`}
           >
-            <FaFilm /> Quản lý phim
+            <FaFilm /> Quản lý Phim
           </Link>
           <Link
             to="/admin/tickets"
             className={`flex items-center gap-3 px-6 py-3 ${active("/dat-ve")}`}
           >
-            <FaTicketAlt /> Quản lý Đặt vé
+            <FaTicketAlt /> Quản lý Đặt Vé
           </Link>
           <Link
             to="/suat-chieu"
@@ -64,13 +64,13 @@ export default function Sidebar() {
               "/suat-chieu"
             )}`}
           >
-            <FaClock /> Quản lý Suất chiếu
+            <FaClock /> Quản lý Suất Chiếu
           </Link>
           <Link
             to="/rap"
             className={`flex items-center gap-3 px-6 py-3 ${active("/rap")}`}
           >
-            <FaBuilding /> Quản lý Rạp Phim
+            <FaBuilding /> Quản Lý Rạp Phim
           </Link>
           <Link
             to="/bao-cao"
@@ -78,7 +78,7 @@ export default function Sidebar() {
               "/bao-cao"
             )}`}
           >
-            <FaFileAlt /> Quản lý Báo Cáo
+            <FaFileAlt /> Quản Lý Báo Cáo
           </Link>
           <Link
             to="/admin/customers"
@@ -86,7 +86,7 @@ export default function Sidebar() {
               "/admin/customers"
             )}`}
           >
-            <FaUsers /> Quản lý Khách hàng
+            <FaUsers /> Quản Lý Khách hàng
           </Link>
           <Link
             to="/premium"
@@ -94,7 +94,7 @@ export default function Sidebar() {
               "/premium"
             )}`}
           >
-            <FaCrown /> Quản lý Gói Premium
+            <FaCrown /> Quản Lý Gói Premium
           </Link>
           <Link
             to="/cai-dat"
@@ -102,7 +102,7 @@ export default function Sidebar() {
               "/cai-dat"
             )}`}
           >
-            <FaCog /> Cài đặt
+            <FaCog /> Cài Đặt
           </Link>
         </nav>
       </div>
@@ -117,7 +117,7 @@ export default function Sidebar() {
           </div>
           <div>
             <p className="text-white text-sm font-medium">Admin</p>
-            <p className="text-gray-400 text-xs">Quản trị viên</p>
+            <p className="text-gray-400 text-xs">Quản Trị Viên</p>
           </div>
         </div>
         <FaSignOutAlt className="text-gray-400" />

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getMovies,
   createMovie,
@@ -14,27 +14,28 @@ import {
   AiOutlineDelete,
   AiOutlineEye,
   AiOutlinePlus,
-  AiOutlineSearch,
 } from "react-icons/ai";
 import { toast } from "react-toastify";
 
 export default function MovieList() {
   const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [readOnly, setReadOnly] = useState(false);
 
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const limit = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
+  // Load movies từ API
   const fetchMovies = async () => {
     try {
-      const data = await getMovies(page, limit, searchTerm);
+      const data = await getMovies();
       setMovies(data.movies || []);
-      setTotalPages(data.totalPages || 1);
+      setFilteredMovies(data.movies || []);
     } catch (err) {
       console.error(err);
       toast.error("Lỗi khi tải danh sách phim!");
@@ -43,8 +44,28 @@ export default function MovieList() {
 
   useEffect(() => {
     fetchMovies();
-  }, [page, searchTerm]);
+  }, []);
 
+  // Client-side search
+  useEffect(() => {
+    const term = searchTerm.toLowerCase();
+    const filtered = movies.filter(
+      (m) =>
+        m.title?.toLowerCase().includes(term) ||
+        m.category?.toLowerCase().includes(term)
+    );
+    setFilteredMovies(filtered);
+    setCurrentPage(1); // reset page khi search
+  }, [searchTerm, movies]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredMovies.length / pageSize);
+  const paginatedMovies = filteredMovies.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  // Handlers
   const handleAdd = () => {
     setSelectedMovie(null);
     setReadOnly(false);
@@ -96,7 +117,8 @@ export default function MovieList() {
       toast.error("Lỗi khi xóa phim!");
     }
   };
-  const csvData = movies.map((m) => ({
+
+  const csvData = filteredMovies.map((m) => ({
     title: m.title,
     category: m.category,
     duration: m.duration,
@@ -106,80 +128,65 @@ export default function MovieList() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-          <h2 className="text-2xl font-bold text-gray-800">Quản lý Phim</h2>
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="relative flex-1 md:w-64">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                <AiOutlineSearch size={20} />
-              </span>
-              <input
-                type="text"
-                placeholder="Tìm kiếm phim..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                value={searchTerm}
-                onChange={(e) => {
-                  setPage(1);
-                  setSearchTerm(e.target.value);
-                }}
-              />
-            </div>
-            <button
-              onClick={handleAdd}
-              className="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-sm font-medium whitespace-nowrap"
-            >
-              <AiOutlinePlus size={18} /> Thêm phim
-            </button>
-            <ExportCSV
-              data={csvData}
-              fields={["title", "category", "duration", "status", "rating"]}
-              fileName="DanhSachPhim"
-            />
-          </div>
+      <h1 className="text-2xl font-bold mb-2">Quản Lí Phim</h1>
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-3">
+        <input
+          type="text"
+          placeholder="Tìm kiếm phim..."
+          className="border rounded px-3 py-2 w-96"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <div className="flex gap-2">
+          <button
+            onClick={handleAdd}
+            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            <AiOutlinePlus /> Thêm phim
+          </button>
+          <ExportCSV
+            data={csvData}
+            fields={["title", "category", "duration", "status", "rating"]}
+            fileName="DanhSachPhim"
+          />
         </div>
+      </div>
 
-        <div className="overflow-x-auto rounded-lg border border-gray-200">
-          <table className="w-full text-sm text-left text-gray-600">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b border-gray-200">
+      <div className="bg-white rounded shadow flex flex-col h-[500px]">
+        <div className="flex-1 overflow-y-auto">
+          <table className="w-full text-left text-gray-600 text-sm">
+            <thead className="bg-gray-100 border-b">
               <tr>
-                <th className="px-4 py-3 text-center w-24">Poster</th>
-                <th className="px-4 py-3">Tên phim</th>
-                <th className="px-4 py-3 w-32">Thể loại</th>
-                <th className="px-4 py-3 w-28">Thời lượng</th>
-                <th className="px-4 py-3 text-center w-32">Trạng thái</th>
-                <th className="px-4 py-3 text-center w-24">Đánh giá</th>
-                <th className="px-4 py-3 text-center w-32">Thao tác</th>
+                <th className="px-4 py-2 w-24 text-center">Poster</th>
+                <th className="px-4 py-2">Tên phim</th>
+                <th className="px-4 py-2 w-32">Thể loại</th>
+                <th className="px-4 py-2 w-28">Thời lượng</th>
+                <th className="px-4 py-2 text-center w-32">Trạng thái</th>
+                <th className="px-4 py-2 text-center w-24">Đánh giá</th>
+                <th className="px-4 py-2 text-center w-32">Hành động</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
-              {movies.length > 0 ? (
-                movies.map((movie) => (
-                  <tr
-                    key={movie.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="px-4 py-3 text-center align-middle">
+            <tbody>
+              {paginatedMovies.length > 0 ? (
+                paginatedMovies.map((movie) => (
+                  <tr key={movie.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-2 text-center">
                       <img
                         src={movie.poster_url}
                         alt={movie.title}
-                        className="w-12 h-16 object-cover rounded border border-gray-300 shadow-sm mx-auto"
+                        className="w-12 h-16 object-cover rounded border mx-auto"
                       />
                     </td>
-                    <td className="px-4 py-3 font-medium text-gray-900 align-middle">
-                      {movie.title}
-                    </td>
-                    <td className="px-4 py-3 align-middle">
-                      <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                    <td className="px-4 py-2 font-medium">{movie.title}</td>
+                    <td className="px-4 py-2">
+                      <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-xs">
                         {movie.category}
                       </span>
                     </td>
-                    <td className="px-4 py-3 align-middle">
-                      {movie.duration} phút
-                    </td>
-                    <td className="px-4 py-3 text-center align-middle">
+                    <td className="px-4 py-2">{movie.duration} phút</td>
+                    <td className="px-4 py-2 text-center">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
                           movie.is_offline
                             ? "bg-green-100 text-green-800"
                             : "bg-yellow-100 text-yellow-800"
@@ -188,31 +195,31 @@ export default function MovieList() {
                         {movie.is_offline ? "Đang chiếu" : "Sắp chiếu"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-center align-middle font-bold text-yellow-500">
+                    <td className="px-4 py-2 text-center font-bold text-yellow-500">
                       {movie.rating} ⭐
                     </td>
-                    <td className="px-4 py-3 text-center align-middle">
-                      <div className="flex justify-center gap-2">
+                    <td className="px-4 py-2 text-center">
+                      <div className="inline-flex items-center justify-center gap-2">
                         <button
                           onClick={() => handleView(movie)}
-                          className="p-2 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition"
+                          className="p-2 bg-blue-50 text-blue-600 rounded hover:bg-blue-100"
                           title="Xem chi tiết"
                         >
-                          <AiOutlineEye size={18} />
+                          <AiOutlineEye />
                         </button>
                         <button
                           onClick={() => handleEdit(movie)}
-                          className="p-2 bg-yellow-50 text-yellow-600 rounded hover:bg-yellow-100 transition"
+                          className="p-2 bg-yellow-50 text-yellow-600 rounded hover:bg-yellow-100"
                           title="Sửa"
                         >
-                          <AiOutlineEdit size={18} />
+                          <AiOutlineEdit />
                         </button>
                         <button
                           onClick={() => handleDelete(movie)}
-                          className="p-2 bg-red-50 text-red-600 rounded hover:bg-red-100 transition"
+                          className="p-2 bg-red-50 text-red-600 rounded hover:bg-red-100"
                           title="Xóa"
                         >
-                          <AiOutlineDelete size={18} />
+                          <AiOutlineDelete />
                         </button>
                       </div>
                     </td>
@@ -221,34 +228,40 @@ export default function MovieList() {
               ) : (
                 <tr>
                   <td colSpan="7" className="text-center py-8 text-gray-500">
-                    Không tìm thấy phim nào.
+                    Không tìm thấy phim nào
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-          <div className="absolute bottom-4 left-0 w-full flex justify-center">
-            <Pagination
-              page={page}
-              totalPages={totalPages}
-              onPageChange={setPage}
-            />
-          </div>
+        </div>
+
+        <div className="border-t py-3 flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
 
-      <MovieModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSubmit={handleSubmit}
-        movie={selectedMovie}
-        readOnly={readOnly}
-      />
-      <ConfirmDeleteModal
-        isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        onConfirm={handleConfirmDelete}
-      />
+      {modalOpen && (
+        <MovieModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onSubmit={handleSubmit}
+          movie={selectedMovie}
+          readOnly={readOnly}
+        />
+      )}
+
+      {deleteModalOpen && (
+        <ConfirmDeleteModal
+          isOpen={deleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+          onConfirm={handleConfirmDelete}
+        />
+      )}
     </div>
   );
 }
