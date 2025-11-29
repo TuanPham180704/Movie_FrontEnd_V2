@@ -4,7 +4,7 @@ import { cinemaApi } from "../../api/cinemaApi";
 import Pagination from "../../components/Pagination";
 import ExportCSV from "../../components/common/ExportCSV";
 import RoomModal from "../../components/Admin/Room/RoomModal";
-import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../../components/Admin/ConfirmDeleteModal";
 import { toast } from "react-toastify";
 import {
   AiOutlinePlus,

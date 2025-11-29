@@ -3,7 +3,7 @@ import { cinemaApi } from "../../api/cinemaApi";
 import Pagination from "../../components/Pagination";
 import ExportCSV from "../../components/common/ExportCSV";
 import CinemaModal from "../../components/Admin/Cinema/CinemaModal";
-import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../../components/Admin/ConfirmDeleteModal";
 import { toast } from "react-toastify";
 
 import {
