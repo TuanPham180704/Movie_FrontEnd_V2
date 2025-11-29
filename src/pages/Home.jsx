@@ -7,7 +7,6 @@ import Banner from "../components/Banner";
 import DevChillApp from "../components/DevChillApp";
 import ChatBot from "../components/ChatBot";
 
-
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [chinaMovies, setChinaMovies] = useState([]);
@@ -16,9 +15,8 @@ export default function Home() {
   const [cartoonMovies, setCartoonMovies] = useState([]);
   useEffect(() => {
     const fetchAll = async () => {
-      try {
+      try {  
         setLoading(true);
-
         const [chinaData, koreaData, vnData, cartoonData] = await Promise.all([
           movieApi.getCountryDetail("trung-quoc", 1),
           movieApi.getCountryDetail("han-quoc", 1),
