@@ -23,6 +23,7 @@ import CinemaManagement from "../pages/Admin/CinemaManagement";
 import RoomManagement from "../pages/Admin/RoomManagement";
 import ShowtimeManagement from "../pages/Admin/ShowtimeManagement";
 import SubscriptionPlanManagement from "../pages/Admin/SubscriptionPlanManagement";
+import SettingsPage from "../pages/Admin/SettingsPage";
 export default function AppRouter() {
   return (
     <>
@@ -65,6 +66,7 @@ export default function AppRouter() {
                 path="/admin/premium"
                 element={<SubscriptionPlanManagement />}
               />
+              <Route path="/admin/setting" element={<SettingsPage />} />
             </Route>
           </Route>
           <Route element={<NotFound />} path="*" />

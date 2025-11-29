@@ -112,9 +112,9 @@ export default function Sidebar() {
             <FaCrown /> Quản Lý Gói Premium
           </Link>
           <Link
-            to="/cai-dat"
+            to="/admin/setting"
             className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/cai-dat"
+              "/admin/setting"
             )}`}
           >
             <FaCog /> Cài Đặt
