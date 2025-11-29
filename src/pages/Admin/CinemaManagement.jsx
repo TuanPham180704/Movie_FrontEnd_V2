@@ -29,7 +29,6 @@ export default function CinemaManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
-  // Fetch all cinemas
   const fetchCinemas = async () => {
     try {
       const data = await cinemaApi.getAll();
@@ -45,7 +44,6 @@ export default function CinemaManagement() {
     fetchCinemas();
   }, []);
 
-  // Realtime search
   useEffect(() => {
     const term = searchTerm.toLowerCase();
     const filtered = cinemas.filter(
@@ -59,7 +57,6 @@ export default function CinemaManagement() {
     setCurrentPage(1);
   }, [searchTerm, cinemas]);
 
-  // ACTIONS
   const handleCreate = () => {
     setSelectedCinema(null);
     setModalMode("create");
@@ -88,7 +85,6 @@ export default function CinemaManagement() {
       if (modalMode === "create") {
         await cinemaApi.create(formData);
       } else {
-        // Merge old data with new form data to avoid missing fields
         const updatedData = { ...selectedCinema, ...formData };
         await cinemaApi.update(selectedCinema.id, updatedData);
       }
@@ -114,7 +110,6 @@ export default function CinemaManagement() {
     }
   };
 
-  // Pagination
   const totalPages = Math.ceil(filteredCinemas.length / pageSize);
   const pageData = filteredCinemas.slice(
     (currentPage - 1) * pageSize,
@@ -123,7 +118,6 @@ export default function CinemaManagement() {
 
   return (
     <div className="p-6">
-      {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between mb-4 gap-3">
         <h1 className="text-2xl font-bold">Quản Lý Rạp Phim</h1>
 
@@ -154,8 +148,6 @@ export default function CinemaManagement() {
           </button>
         </div>
       </div>
-
-      {/* TABLE */}
       <div className="bg-white shadow rounded-lg h-[500px] flex flex-col">
         <div className="flex-1 overflow-y-auto">
           <table className="min-w-full text-left text-sm">
@@ -248,9 +240,16 @@ export default function CinemaManagement() {
       <ConfirmDeleteModal
         isOpen={isDeleteModalOpen}
         title="Xóa rạp"
-        message={`Bạn chắc muốn xóa rạp "${selectedCinema?.name}" ?`}
+        message={
+          selectedCinema
+            ? `Bạn chắc muốn xóa rạp "${selectedCinema.name}" ?`
+            : "Bạn chắc muốn xóa rạp này?"
+        }
         onConfirm={handleConfirmDelete}
-        onClose={() => setIsDeleteModalOpen(false)}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setSelectedCinema(null);
+        }}
       />
     </div>
   );

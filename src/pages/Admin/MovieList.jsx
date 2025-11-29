@@ -6,7 +6,7 @@ import {
   deleteMovie,
 } from "../../api/movie_apiadmin";
 import MovieModal from "../../components/Admin/Movie/MovieModal";
-import ConfirmDeleteModal from "../../components/Admin/Movie/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../../components/Admin/ConfirmDeleteModal";
 import Pagination from "../../components/Pagination";
 import ExportCSV from "../../components/common/ExportCSV";
 import {
@@ -30,7 +30,6 @@ export default function MovieList() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
-  // Load movies từ API
   const fetchMovies = async () => {
     try {
       const data = await getMovies();
@@ -46,7 +45,6 @@ export default function MovieList() {
     fetchMovies();
   }, []);
 
-  // Client-side search
   useEffect(() => {
     const term = searchTerm.toLowerCase();
     const filtered = movies.filter(
@@ -55,17 +53,14 @@ export default function MovieList() {
         m.category?.toLowerCase().includes(term)
     );
     setFilteredMovies(filtered);
-    setCurrentPage(1); // reset page khi search
+    setCurrentPage(1);
   }, [searchTerm, movies]);
 
-  // Pagination
   const totalPages = Math.ceil(filteredMovies.length / pageSize);
   const paginatedMovies = filteredMovies.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
-
-  // Handlers
   const handleAdd = () => {
     setSelectedMovie(null);
     setReadOnly(false);
@@ -261,8 +256,10 @@ export default function MovieList() {
       {deleteModalOpen && (
         <ConfirmDeleteModal
           isOpen={deleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
+          title="Xóa Phim"
+          message={`Bạn chắc muốn phim "${selectedMovie?.title}" ?`}
           onConfirm={handleConfirmDelete}
+          onClose={() => setDeleteModalOpen(false)} 
         />
       )}
     </div>

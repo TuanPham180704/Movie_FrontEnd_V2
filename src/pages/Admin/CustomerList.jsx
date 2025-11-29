@@ -8,7 +8,7 @@ import {
 import { AiOutlineEye, AiOutlineLock, AiOutlineDelete } from "react-icons/ai";
 import CustomerModal from "../../components/Admin/Users/CustomerModal";
 import LockModal from "../../components/Admin/Users/LockModal";
-import DeleteModal from "../../components/Admin/Users/DeleteModal";
+import ConfirmDeleteModal from "../../components/Admin/ConfirmDeleteModal";
 import Pagination from "../../components/Pagination";
 import ExportCSV from "../../components/common/ExportCSV";
 import { toast } from "react-toastify";
@@ -223,14 +223,19 @@ export default function CustomerList() {
       )}
 
       {deleteUserData && (
-        <DeleteModal
+        <ConfirmDeleteModal
           isOpen={true}
-          itemName={deleteUserData.username}
-          onClose={() => setDeleteUserData(null)}
+          title="Xóa khách hàng"
+          message={
+            deleteUserData
+              ? `Bạn có chắc chắn muốn xóa khách hàng "${deleteUserData.username}"?`
+              : "Bạn có chắc chắn muốn xóa khách hàng này?"
+          }
           onConfirm={async () => {
             await handleDelete(deleteUserData.id);
             setDeleteUserData(null);
           }}
+          onClose={() => setDeleteUserData(null)}
         />
       )}
     </div>

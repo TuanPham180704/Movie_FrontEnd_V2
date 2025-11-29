@@ -4,7 +4,7 @@ import Pagination from "../../components/Pagination";
 import ExportCSV from "../../components/common/ExportCSV";
 import TicketTable from "../../components/Admin/Tickets/TicketTable";
 import TicketModal from "../../components/Admin/Tickets/TicketModal";
-import DeleteModal from "../../components/Admin/Tickets/DeleteModal";
+import ConfirmDeleteModal from "../../components/Admin/ConfirmDeleteModal";
 import { toast } from "react-toastify";
 
 export default function TicketManagement() {
@@ -152,16 +152,12 @@ export default function TicketManagement() {
         mode={modalMode}
         onSubmit={handleSubmitTicket}
       />
-
-      <DeleteModal
+      <ConfirmDeleteModal
         isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
+        title="Xóa Vé"
+        message={`Bạn muốn xóa phòng "${selectedTicket?.movie_title}" - Ghế ${selectedTicket?.seat_number}?`}
         onConfirm={handleConfirmDelete}
-        ticketLabel={
-          selectedTicket
-            ? `${selectedTicket.movie_title} - Ghế ${selectedTicket.seat_number}`
-            : ""
-        }
+        onClose={() => setIsDeleteModalOpen(false)}
       />
     </div>
   );

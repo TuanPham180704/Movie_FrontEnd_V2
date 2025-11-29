@@ -28,7 +28,7 @@ export default function RoomManagement() {
   const [cinemaFilter, setCinemaFilter] = useState("all");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 6;
+  const pageSize = 5;
 
   const fetchRooms = async () => {
     try {
@@ -53,12 +53,8 @@ export default function RoomManagement() {
     fetchRooms();
     fetchCinemas();
   }, []);
-
-  // ========== FILTER ROOM ==========
   useEffect(() => {
     let result = [...rooms];
-
-    // Filter theo search
     if (searchTerm.trim() !== "") {
       const term = searchTerm.toLowerCase();
       result = result.filter(
@@ -67,8 +63,6 @@ export default function RoomManagement() {
           r.cinema_name?.toLowerCase().includes(term)
       );
     }
-
-    // Filter theo rạp
     if (cinemaFilter !== "all") {
       result = result.filter((r) => r.cinema_id == cinemaFilter);
     }
@@ -76,8 +70,6 @@ export default function RoomManagement() {
     setFilteredRooms(result);
     setCurrentPage(1);
   }, [searchTerm, cinemaFilter, rooms]);
-
-  // ========== CRUD HANDLERS ==========
   const handleCreate = () => {
     setSelectedRoom(null);
     setModalMode("create");
@@ -124,8 +116,6 @@ export default function RoomManagement() {
       toast.error("Xóa phòng thất bại!");
     }
   };
-
-  // ========== PAGINATION ==========
   const totalPages = Math.ceil(filteredRooms.length / pageSize);
   const pageData = filteredRooms.slice(
     (currentPage - 1) * pageSize,
@@ -134,12 +124,9 @@ export default function RoomManagement() {
 
   return (
     <div className="p-6">
-      {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
         <h1 className="text-2xl font-bold">Quản Lý Phòng Chiếu</h1>
-
         <div className="flex items-center gap-3">
-          {/* FILTER THEO RẠP */}
           <select
             value={cinemaFilter}
             onChange={(e) => setCinemaFilter(e.target.value)}
@@ -152,8 +139,6 @@ export default function RoomManagement() {
               </option>
             ))}
           </select>
-
-          {/* SEARCH */}
           <div className="relative">
             <AiOutlineSearch className="absolute left-3 top-3 text-gray-500" />
             <input
@@ -164,15 +149,11 @@ export default function RoomManagement() {
               className="border rounded-lg px-10 py-2 w-72 focus:border-black"
             />
           </div>
-
-          {/* CSV */}
           <ExportCSV
             data={filteredRooms}
             fileName="rooms"
             fields={["id", "name", "cinema_name", "seat_layout", "created_at"]}
           />
-
-          {/* ADD */}
           <button
             onClick={handleCreate}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
@@ -183,9 +164,7 @@ export default function RoomManagement() {
         </div>
       </div>
 
-      {/* TABLE CONTAINER */}
       <div className="bg-white rounded-xl border shadow-sm h-[600px] flex flex-col">
-        {/* TABLE SCROLL */}
         <div className="flex-1 overflow-y-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-100 sticky top-0 z-10">
