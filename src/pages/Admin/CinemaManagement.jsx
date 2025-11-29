@@ -1,10 +1,9 @@
-// src/pages/admin/CinemaManagement.jsx
 import { useEffect, useState } from "react";
 import { cinemaApi } from "../../api/cinemaApi";
 import Pagination from "../../components/Pagination";
 import ExportCSV from "../../components/common/ExportCSV";
 import CinemaModal from "../../components/Admin/Cinema/CinemaModal";
-import ConfirmDeleteModal from "../../components/Admin/Cinema/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
 import { toast } from "react-toastify";
 
 import {
@@ -238,8 +237,6 @@ export default function CinemaManagement() {
           />
         </div>
       </div>
-
-      {/* MODALS */}
       <CinemaModal
         isOpen={isModalOpen}
         mode={modalMode}
