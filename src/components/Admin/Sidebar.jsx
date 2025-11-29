@@ -88,14 +88,6 @@ export default function Sidebar() {
             <FaHouseDamage /> Quản Lý Phòng Chiếu
           </Link>
           <Link
-            to="/bao-cao"
-            className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/bao-cao"
-            )}`}
-          >
-            <FaFileAlt /> Quản Lý Báo Cáo
-          </Link>
-          <Link
             to="/admin/customers"
             className={`flex items-center gap-3 px-6 py-3 ${active(
               "/admin/customers"
