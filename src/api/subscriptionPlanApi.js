@@ -22,7 +22,7 @@ export const subscriptionPlanApi = {
     return res.data;
   },
   update: async (id, data) => {
-    const res = await api.put(`/admin/subscription-plans/${id}`, data);
+    const res = await api.patch(`/admin/subscription-plans/${id}`, data);
     return res.data;
   },
   delete: async (id) => {

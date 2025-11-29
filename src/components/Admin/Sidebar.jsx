@@ -104,9 +104,9 @@ export default function Sidebar() {
             <FaUsers /> Quản Lý Khách hàng
           </Link>
           <Link
-            to="/premium"
+            to="/admin/premium"
             className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/premium"
+              "/admin/premium"
             )}`}
           >
             <FaCrown /> Quản Lý Gói Premium
