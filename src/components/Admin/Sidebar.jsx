@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaChartPie,
@@ -5,12 +6,13 @@ import {
   FaTicketAlt,
   FaClock,
   FaBuilding,
-  FaFileAlt,
   FaUsers,
   FaCrown,
   FaCog,
   FaSignOutAlt,
   FaHouseDamage,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { logout } from "../../utils/auth";
 import { toast } from "react-toastify";
@@ -18,6 +20,7 @@ import { toast } from "react-toastify";
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   const active = (path) =>
     location.pathname === path
@@ -31,104 +34,138 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-64 bg-[#101322] h-screen flex flex-col justify-between">
-      <div>
-        <div className="flex items-center gap-2 p-6">
-          <div>
-            <h1 className="text-white text-lg font-semibold">🎬 DevChill</h1>
-            <p className="text-gray-400 text-sm">Quản lý Rạp Phim</p>
-          </div>
-        </div>
-
-        <nav className="mt-4 flex flex-col gap-1">
-          <Link
-            to="/admin"
-            className={`flex items-center gap-3 px-6 py-3 ${active("/")}`}
-          >
-            <FaChartPie /> Tổng quan
-          </Link>
-          <Link
-            to="/admin/movies"
-            className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/admin/movies"
-            )}`}
-          >
-            <FaFilm /> Quản lý Phim
-          </Link>
-          <Link
-            to="/admin/tickets"
-            className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/admin/tickets"
-            )}`}
-          >
-            <FaTicketAlt /> Quản lý Đặt Vé
-          </Link>
-          <Link
-            to="/admin/showtime"
-            className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/admin/showtime"
-            )}`}
-          >
-            <FaClock /> Quản lý Suất Chiếu
-          </Link>
-          <Link
-            to="/admin/cinema"
-            className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/admin/cinema"
-            )}`}
-          >
-            <FaBuilding /> Quản Lý Rạp Phim
-          </Link>
-          <Link
-            to="/admin/room"
-            className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/admin/room"
-            )}`}
-          >
-            <FaHouseDamage /> Quản Lý Phòng Chiếu
-          </Link>
-          <Link
-            to="/admin/customers"
-            className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/admin/customers"
-            )}`}
-          >
-            <FaUsers /> Quản Lý Khách hàng
-          </Link>
-          <Link
-            to="/admin/premium"
-            className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/admin/premium"
-            )}`}
-          >
-            <FaCrown /> Quản Lý Gói Premium
-          </Link>
-          <Link
-            to="/admin/setting"
-            className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/admin/setting"
-            )}`}
-          >
-            <FaCog /> Cài Đặt
-          </Link>
-        </nav>
-      </div>
-
-      <div
-        className="flex items-center justify-between bg-[#191d2e] mx-4 mb-4 p-3 rounded-lg cursor-pointer"
-        onClick={handleLogout}
+    <>
+      <button
+        className="sm:hidden fixed top-4 left-4 z-50 p-2 bg-purple-600 text-white rounded-md"
+        onClick={() => setIsOpen(true)}
       >
-        <div className="flex items-center gap-2">
-          <div className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
-            AD
+        <FaBars />
+      </button>
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsOpen(false)}
+        ></div>
+      )}
+      <div
+        className={`
+          fixed top-0 left-0 h-screen bg-[#101322] flex flex-col justify-between w-64 z-50
+          transform transition-transform duration-300
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          sm:translate-x-0 sm:static sm:flex
+        `}
+      >
+        <div className="flex flex-col h-full">
+          <div className="flex items-center gap-2 p-6">
+            <div>
+              <h1 className="text-white text-lg font-semibold">🎬 DevChill</h1>
+              <p className="text-gray-400 text-sm">Quản lý Rạp Phim</p>
+            </div>
+            <button
+              className="sm:hidden ml-auto text-gray-400 hover:text-white"
+              onClick={() => setIsOpen(false)}
+            >
+              <FaTimes />
+            </button>
           </div>
-          <div>
-            <p className="text-white text-sm font-medium">Admin</p>
-            <p className="text-gray-400 text-xs">Quản Trị Viên</p>
-          </div>
+          <nav className="mt-4 flex-1 flex flex-col gap-1 overflow-y-auto">
+            <Link
+              to="/admin"
+              className={`flex items-center gap-3 px-6 py-3 ${active("/")}`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaChartPie /> Tổng quan
+            </Link>
+            <Link
+              to="/admin/movies"
+              className={`flex items-center gap-3 px-6 py-3 ${active(
+                "/admin/movies"
+              )}`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaFilm /> Quản lý Phim
+            </Link>
+            <Link
+              to="/admin/tickets"
+              className={`flex items-center gap-3 px-6 py-3 ${active(
+                "/admin/tickets"
+              )}`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaTicketAlt /> Quản lý Đặt Vé
+            </Link>
+            <Link
+              to="/admin/showtime"
+              className={`flex items-center gap-3 px-6 py-3 ${active(
+                "/admin/showtime"
+              )}`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaClock /> Quản lý Suất Chiếu
+            </Link>
+            <Link
+              to="/admin/cinema"
+              className={`flex items-center gap-3 px-6 py-3 ${active(
+                "/admin/cinema"
+              )}`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaBuilding /> Quản Lý Rạp Phim
+            </Link>
+            <Link
+              to="/admin/room"
+              className={`flex items-center gap-3 px-6 py-3 ${active(
+                "/admin/room"
+              )}`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaHouseDamage /> Quản Lý Phòng Chiếu
+            </Link>
+            <Link
+              to="/admin/customers"
+              className={`flex items-center gap-3 px-6 py-3 ${active(
+                "/admin/customers"
+              )}`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaUsers /> Quản Lý Khách hàng
+            </Link>
+            <Link
+              to="/admin/premium"
+              className={`flex items-center gap-3 px-6 py-3 ${active(
+                "/admin/premium"
+              )}`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaCrown /> Quản Lý Gói Premium
+            </Link>
+            <Link
+              to="/admin/setting"
+              className={`flex items-center gap-3 px-6 py-3 ${active(
+                "/admin/setting"
+              )}`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaCog /> Cài Đặt
+            </Link>
+          </nav>
         </div>
-        <FaSignOutAlt className="text-gray-400" />
+        <div
+          className="flex items-center justify-between bg-[#191d2e] mx-4 mb-4 p-3 rounded-lg cursor-pointer"
+          onClick={handleLogout}
+        >
+          <div className="flex items-center gap-2">
+            <div className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
+              AD
+            </div>
+            <div>
+              <p className="text-white text-sm font-medium">Admin</p>
+              <p className="text-gray-400 text-xs">Quản Trị Viên</p>
+            </div>
+          </div>
+          <FaSignOutAlt className="text-gray-400" />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
