@@ -22,7 +22,7 @@ export const cinemaApi = {
     return res.data;
   },
   update: async (id, data) => {
-    const res = await api.put(`/admin/cinemas/${id}`, data);
+    const res = await api.patch(`/admin/cinemas/${id}`, data);
     return res.data;
   },
   delete: async (id) => {

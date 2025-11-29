@@ -68,7 +68,7 @@ export default function Sidebar() {
             <FaClock /> Quản lý Suất Chiếu
           </Link>
           <Link
-            to="/rap"
+            to="/admin/cinema"
             className={`flex items-center gap-3 px-6 py-3 ${active("/rap")}`}
           >
             <FaBuilding /> Quản Lý Rạp Phim
