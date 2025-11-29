@@ -10,6 +10,7 @@ import {
   FaCrown,
   FaCog,
   FaSignOutAlt,
+  FaHouseDamage,
 } from "react-icons/fa";
 import { logout } from "../../utils/auth";
 import { toast } from "react-toastify";
@@ -71,6 +72,12 @@ export default function Sidebar() {
             className={`flex items-center gap-3 px-6 py-3 ${active("/rap")}`}
           >
             <FaBuilding /> Quản Lý Rạp Phim
+          </Link>
+          <Link
+            to="/rap"
+            className={`flex items-center gap-3 px-6 py-3 ${active("/rap")}`}
+          >
+            <FaHouseDamage /> Quản Lý Phòng Chiếu
           </Link>
           <Link
             to="/bao-cao"
