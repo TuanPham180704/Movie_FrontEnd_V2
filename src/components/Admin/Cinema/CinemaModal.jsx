@@ -1,9 +1,8 @@
-
 import { useEffect, useState } from "react";
 
 export default function CinemaModal({
   isOpen,
-  mode = "view", 
+  mode = "view",
   initialData,
   onClose,
   onSubmit,
@@ -58,20 +57,20 @@ export default function CinemaModal({
     : "Thông tin rạp";
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30">
-      <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full mx-3">
-        <div className="px-5 py-4 border-b flex items-center justify-between">
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 p-2 sm:p-4">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto">
+        {/* Header */}
+        <div className="px-3 sm:px-5 py-4 border-b flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
           <button
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-gray-700 text-lg sm:text-base"
             onClick={onClose}
           >
             ✕
           </button>
         </div>
-
         <form onSubmit={handleSubmit}>
-          <div className="px-5 py-4 space-y-3">
+          <div className="px-3 sm:px-5 py-4 space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Tên rạp <span className="text-red-500">*</span>
@@ -82,13 +81,13 @@ export default function CinemaModal({
                 value={formData.name}
                 onChange={handleChange}
                 disabled={isView}
+                placeholder="Ví dụ: DevChill Huế"
+                required
                 className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring ${
                   isView
                     ? "bg-gray-100 cursor-not-allowed"
                     : "focus:ring-blue-200"
                 }`}
-                placeholder="Ví dụ: DevChill Huế"
-                required
               />
             </div>
 
@@ -102,12 +101,12 @@ export default function CinemaModal({
                 value={formData.address}
                 onChange={handleChange}
                 disabled={isView}
+                placeholder="56 Hùng Vương, TP. Huế"
                 className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring ${
                   isView
                     ? "bg-gray-100 cursor-not-allowed"
                     : "focus:ring-blue-200"
                 }`}
-                placeholder="56 Hùng Vương, TP. Huế"
               />
             </div>
 
@@ -122,12 +121,12 @@ export default function CinemaModal({
                   value={formData.city}
                   onChange={handleChange}
                   disabled={isView}
+                  placeholder="Thừa Thiên Huế"
                   className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring ${
                     isView
                       ? "bg-gray-100 cursor-not-allowed"
                       : "focus:ring-blue-200"
                   }`}
-                  placeholder="Thừa Thiên Huế"
                 />
               </div>
 
@@ -141,12 +140,12 @@ export default function CinemaModal({
                   value={formData.phone}
                   onChange={handleChange}
                   disabled={isView}
+                  placeholder="0234 888 666"
                   className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring ${
                     isView
                       ? "bg-gray-100 cursor-not-allowed"
                       : "focus:ring-blue-200"
                   }`}
-                  placeholder="0234 888 666"
                 />
               </div>
             </div>
@@ -158,19 +157,18 @@ export default function CinemaModal({
               </div>
             )}
           </div>
-
-          <div className="px-5 py-3 border-t flex justify-end gap-2">
+          <div className="px-3 sm:px-5 py-3 border-t flex flex-col sm:flex-row justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm rounded-lg border hover:bg-gray-50"
+              className="px-4 py-2 text-sm rounded-lg border hover:bg-gray-50 w-full sm:w-auto"
             >
               Đóng
             </button>
             {!isView && (
               <button
                 type="submit"
-                className="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                className="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 w-full sm:w-auto"
               >
                 {isCreate ? "Thêm rạp" : "Lưu thay đổi"}
               </button>

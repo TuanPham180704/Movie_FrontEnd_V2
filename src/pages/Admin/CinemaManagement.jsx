@@ -17,15 +17,11 @@ import {
 export default function CinemaManagement() {
   const [cinemas, setCinemas] = useState([]);
   const [filteredCinemas, setFilteredCinemas] = useState([]);
-
   const [selectedCinema, setSelectedCinema] = useState(null);
   const [modalMode, setModalMode] = useState("view");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
@@ -117,38 +113,35 @@ export default function CinemaManagement() {
   );
 
   return (
-    <div className="p-6">
-      <div className="flex flex-col md:flex-row justify-between mb-4 gap-3">
+    <div className="p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row justify-between mb-4 gap-3">
         <h1 className="text-2xl font-bold">Quản Lý Rạp Phim</h1>
-
-        <div className="flex gap-2 items-center">
-          <div className="relative">
-            <AiOutlineSearch className="absolute left-2 top-3 text-gray-500" />
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <div className="relative w-full sm:w-auto">
+            <AiOutlineSearch className="absolute left-2 top-2.5 text-gray-500" />
             <input
               type="text"
               placeholder="Tìm rạp..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border p-2 pl-8 rounded w-72"
+              className="border p-2 pl-8 rounded w-full sm:w-72"
             />
           </div>
-
           <ExportCSV
             data={filteredCinemas}
             fileName="cinemas"
             fields={["id", "name", "address", "city", "phone", "created_at"]}
           />
-
           <button
             onClick={handleCreate}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2 justify-center"
           >
             <AiOutlinePlus size={18} />
-            Thêm Rạp
+            <span className="hidden sm:inline">Thêm Rạp</span>
           </button>
         </div>
       </div>
-      <div className="bg-white shadow rounded-lg h-[500px] flex flex-col">
+      <div className="bg-white shadow rounded-lg flex flex-col overflow-x-auto">
         <div className="flex-1 overflow-y-auto">
           <table className="min-w-full text-left text-sm">
             <thead>
@@ -178,22 +171,22 @@ export default function CinemaManagement() {
                     key={cinema.id}
                     className="hover:bg-gray-100 transition border-b border-gray-300"
                   >
-                    <td className="p-3">{cinema.id}</td>
-                    <td className="p-3 font-medium truncate max-w-[180px]">
+                    <td className="p-2 sm:p-3">{cinema.id}</td>
+                    <td className="p-2 sm:p-3 font-medium truncate max-w-[120px] sm:max-w-[180px]">
                       {cinema.name}
                     </td>
-                    <td className="p-3 truncate max-w-[220px]">
+                    <td className="p-2 sm:p-3 truncate max-w-40 sm:max-w-[220px]">
                       {cinema.address}
                     </td>
-                    <td className="p-3">{cinema.city}</td>
-                    <td className="p-3">{cinema.phone}</td>
-                    <td className="p-3">
+                    <td className="p-2 sm:p-3">{cinema.city}</td>
+                    <td className="p-2 sm:p-3">{cinema.phone}</td>
+                    <td className="p-2 sm:p-3">
                       {cinema.created_at
                         ? new Date(cinema.created_at).toLocaleString()
                         : "--"}
                     </td>
-                    <td className="p-3">
-                      <div className="flex justify-center gap-3 text-[18px]">
+                    <td className="p-2 sm:p-3">
+                      <div className="flex justify-center gap-2 sm:gap-3 text-[16px] sm:text-[18px]">
                         <button
                           onClick={() => handleView(cinema)}
                           className="text-gray-600 hover:text-black"
@@ -220,8 +213,7 @@ export default function CinemaManagement() {
             </tbody>
           </table>
         </div>
-
-        <div className="border-t py-3 flex justify-center">
+        <div className="border-t py-3 flex justify-center overflow-x-auto">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
