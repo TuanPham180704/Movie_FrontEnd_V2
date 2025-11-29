@@ -25,7 +25,7 @@ export const showtimeApi = {
   },
 
   update: async (id, data) => {
-    const res = await api.put(`/admin/showtimes/${id}`, data);
+    const res = await api.patch(`/admin/showtimes/${id}`, data);
     return res.data;
   },
 

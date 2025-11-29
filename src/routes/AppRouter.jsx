@@ -21,6 +21,7 @@ import MovieListAmin from "../pages/Admin/MovieList";
 import TicketManagement from "../pages/Admin/TicketManagement";
 import CinemaManagement from "../pages/Admin/CinemaManagement";
 import RoomManagement from "../pages/Admin/RoomManagement";
+import ShowtimeManagement from "../pages/Admin/ShowtimeManagement";
 export default function AppRouter() {
   return (
     <>
@@ -57,7 +58,8 @@ export default function AppRouter() {
               <Route path="/admin/movies" element={<MovieListAmin />} />
               <Route path="/admin/tickets" element={<TicketManagement />} />
               <Route path="/admin/cinema" element={<CinemaManagement />} />
-              <Route path="/admin/room/" element={<RoomManagement />} />
+              <Route path="/admin/room" element={<RoomManagement />} />
+              <Route path="/admin/showtime" element={<ShowtimeManagement />} />
             </Route>
           </Route>
           <Route element={<NotFound />} path="*" />

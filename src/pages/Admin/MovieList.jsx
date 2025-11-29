@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  getMovies,
-  createMovie,
-  updateMovie,
-  deleteMovie,
-} from "../../api/movie_apiadmin";
+import { movieApiAdmin } from "../../api/movie_apiadmin"; // import object
 import MovieModal from "../../components/Admin/Movie/MovieModal";
 import ConfirmDeleteModal from "../../components/Admin/ConfirmDeleteModal";
 import Pagination from "../../components/Pagination";
@@ -32,7 +27,11 @@ export default function MovieList() {
 
   const fetchMovies = async () => {
     try {
-      const data = await getMovies();
+      const data = await movieApiAdmin.getAll(
+        currentPage,
+        pageSize,
+        searchTerm
+      );
       setMovies(data.movies || []);
       setFilteredMovies(data.movies || []);
     } catch (err) {
@@ -43,7 +42,7 @@ export default function MovieList() {
 
   useEffect(() => {
     fetchMovies();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     const term = searchTerm.toLowerCase();
@@ -61,6 +60,7 @@ export default function MovieList() {
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+
   const handleAdd = () => {
     setSelectedMovie(null);
     setReadOnly(false);
@@ -87,10 +87,10 @@ export default function MovieList() {
   const handleSubmit = async (formData) => {
     try {
       if (selectedMovie) {
-        await updateMovie(selectedMovie.id, formData);
+        await movieApiAdmin.update(selectedMovie.id, formData);
         toast.success("Cập nhật phim thành công!");
       } else {
-        await createMovie(formData);
+        await movieApiAdmin.create(formData);
         toast.success("Thêm phim mới thành công!");
       }
       setModalOpen(false);
@@ -103,7 +103,7 @@ export default function MovieList() {
 
   const handleConfirmDelete = async () => {
     try {
-      await deleteMovie(selectedMovie.id);
+      await movieApiAdmin.delete(selectedMovie.id);
       toast.success("Đã xóa phim thành công!");
       setDeleteModalOpen(false);
       fetchMovies();
@@ -257,9 +257,9 @@ export default function MovieList() {
         <ConfirmDeleteModal
           isOpen={deleteModalOpen}
           title="Xóa Phim"
-          message={`Bạn chắc muốn phim "${selectedMovie?.title}" ?`}
+          message={`Bạn chắc muốn xóa phim "${selectedMovie?.title}"?`}
           onConfirm={handleConfirmDelete}
-          onClose={() => setDeleteModalOpen(false)} 
+          onClose={() => setDeleteModalOpen(false)}
         />
       )}
     </div>

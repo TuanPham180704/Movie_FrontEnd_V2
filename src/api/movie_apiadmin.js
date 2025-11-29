@@ -8,24 +8,26 @@ const api = axios.create({
   },
 });
 
-export const getMovies = async (page = 1, limit = 5, search = "") => {
-  const response = await api.get("/admin/movies", {
-    params: { page, limit, search },
-  });
-  return response.data;
-};
+export const movieApiAdmin = {
+  getAll: async (page = 1, limit = 5, search = "") => {
+    const res = await api.get("/admin/movies", {
+      params: { page, limit, search },
+    });
+    return res.data;
+  },
 
-export const createMovie = async (movieData) => {
-  const response = await api.post("/admin/movies", movieData);
-  return response.data;
-};
+  create: async (movieData) => {
+    const res = await api.post("/admin/movies", movieData);
+    return res.data;
+  },
 
-export const updateMovie = async (id, movieData) => {
-  const response = await api.patch(`/admin/movies/${id}`, movieData);
-  return response.data;
-};
+  update: async (id, movieData) => {
+    const res = await api.patch(`/admin/movies/${id}`, movieData);
+    return res.data;
+  },
 
-export const deleteMovie = async (id) => {
-  const response = await api.delete(`/admin/movies/${id}`);
-  return response.data;
+  delete: async (id) => {
+    const res = await api.delete(`/admin/movies/${id}`);
+    return res.data;
+  },
 };

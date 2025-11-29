@@ -49,33 +49,41 @@ export default function Sidebar() {
           </Link>
           <Link
             to="/admin/movies"
-            className={`flex items-center gap-3 px-6 py-3 ${active("/phim")}`}
+            className={`flex items-center gap-3 px-6 py-3 ${active(
+              "/admin/movies"
+            )}`}
           >
             <FaFilm /> Quản lý Phim
           </Link>
           <Link
             to="/admin/tickets"
-            className={`flex items-center gap-3 px-6 py-3 ${active("/dat-ve")}`}
+            className={`flex items-center gap-3 px-6 py-3 ${active(
+              "/admin/tickets"
+            )}`}
           >
             <FaTicketAlt /> Quản lý Đặt Vé
           </Link>
           <Link
-            to="/suat-chieu"
+            to="/admin/showtime"
             className={`flex items-center gap-3 px-6 py-3 ${active(
-              "/suat-chieu"
+              "/admin/showtime"
             )}`}
           >
             <FaClock /> Quản lý Suất Chiếu
           </Link>
           <Link
             to="/admin/cinema"
-            className={`flex items-center gap-3 px-6 py-3 ${active("/rap")}`}
+            className={`flex items-center gap-3 px-6 py-3 ${active(
+              "/admin/cinema"
+            )}`}
           >
             <FaBuilding /> Quản Lý Rạp Phim
           </Link>
           <Link
             to="/admin/room"
-            className={`flex items-center gap-3 px-6 py-3 ${active("/rap")}`}
+            className={`flex items-center gap-3 px-6 py-3 ${active(
+              "/admin/room"
+            )}`}
           >
             <FaHouseDamage /> Quản Lý Phòng Chiếu
           </Link>
