@@ -15,7 +15,7 @@ export default function Home() {
   const [cartoonMovies, setCartoonMovies] = useState([]);
   useEffect(() => {
     const fetchAll = async () => {
-      try {  
+      try {
         setLoading(true);
         const [chinaData, koreaData, vnData, cartoonData] = await Promise.all([
           movieApi.getCountryDetail("trung-quoc", 1),
