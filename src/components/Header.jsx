@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import axios from "axios";
 import SearchBox from "./SearchBox";
+import { toast } from "react-toastify";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -101,6 +102,16 @@ export default function Header() {
 
           <Link
             to="/booking"
+            onClick={(e) => {
+              const token = localStorage.getItem("token");
+              if (!token) {
+                e.preventDefault();
+                toast.warning("Vui lòng đăng nhập trước khi đặt vé!", {
+                  position: "top-right",
+                  autoClose: 3000,
+                });
+              }
+            }}
             className="bg-yellow-500 hover:bg-yellow-400 text-black font-medium px-4 py-2 rounded-full transition"
           >
             Đặt vé xem phim
@@ -123,9 +134,7 @@ export default function Header() {
               </button>
 
               {openUserMenu && (
-                <div
-                  className="absolute right-0 mt-2 w-44 bg-[#222] border border-gray-700 rounded-md shadow-lg py-2 z-50 animate-fadeIn"
-                >
+                <div className="absolute right-0 mt-2 w-44 bg-[#222] border border-gray-700 rounded-md shadow-lg py-2 z-50 animate-fadeIn">
                   <Link
                     to="/premium"
                     className="block px-4 py-2 text-sm bg-amber-400 hover:bg-blue-700"
