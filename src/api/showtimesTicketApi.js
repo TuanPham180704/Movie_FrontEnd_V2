@@ -16,14 +16,14 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export const movieTicketApi = {
-  getAll: async (params) => {
-    const res = await api.get("/admin/movies", { params });
+export const showtimeTicketApi = {
+  getAll: async (params) => { 
+    const res = await api.get("/admin/showtimes", { params });
     return res.data;
   },
 
   getById: async (id) => {
-    const res = await api.get(`/admin/movies/${id}`);
+    const res = await api.get(`/admin/showtimes/${id}`);
     return res.data;
   },
 };
