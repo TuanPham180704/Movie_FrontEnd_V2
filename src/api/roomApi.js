@@ -35,4 +35,8 @@ export const roomApi = {
     const res = await api.delete(`/admin/rooms/${id}`);
     return res.data;
   },
+  getSeatsByRoomId: async (roomId) => {
+    const res = await api.get(`/admin/rooms/${roomId}/seats`);
+    return res.data; 
+  },
 };

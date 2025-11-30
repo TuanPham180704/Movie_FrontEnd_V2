@@ -36,6 +36,7 @@ export default function Header() {
   const handleLogout = () => {
     removeToken();
     navigate("/login");
+    toast.info("Đã đăng xuất!");
   };
 
   useEffect(() => {
