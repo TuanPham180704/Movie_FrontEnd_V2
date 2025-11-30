@@ -24,6 +24,7 @@ import RoomManagement from "../pages/Admin/RoomManagement";
 import ShowtimeManagement from "../pages/Admin/ShowtimeManagement";
 import SubscriptionPlanManagement from "../pages/Admin/SubscriptionPlanManagement";
 import SettingsPage from "../pages/Admin/SettingsPage";
+import DevChillLandingPage from "../pages/Cinema/DevChillLandingPage";
 export default function AppRouter() {
   return (
     <>
@@ -33,6 +34,7 @@ export default function AppRouter() {
             <Route index element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/booking" element={<DevChillLandingPage />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/movies/phim-bo" element={<MovieList />} />
