@@ -8,6 +8,7 @@ const api = axios.create({
   },
 });
 
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -15,24 +16,14 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
-export const userTicketApi = {
+
+export const cinemaApiTicket = {
   getAll: async () => {
-    const res = await api.get("/user/tickets");
+    const res = await api.get("/admin/cinemas");
     return res.data;
   },
-
   getById: async (id) => {
-    const res = await api.get(`/user/tickets/${id}`);
-    return res.data;
-  },
-
-  book: async (data) => {
-    const res = await api.post("/user/tickets", data);
-    return res.data;
-  },
-
-  pay: async (id) => {
-    const res = await api.patch(`/user/tickets/pay/${id}`);
+    const res = await api.get(`/admin/cinemas/${id}`);
     return res.data;
   },
 };
