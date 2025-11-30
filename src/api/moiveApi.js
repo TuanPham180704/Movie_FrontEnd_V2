@@ -9,13 +9,6 @@ const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 const handleError = (error) => {
   console.error("Movie API Error:", error?.response?.data || error.message);
   throw error;

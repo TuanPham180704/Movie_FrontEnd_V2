@@ -141,8 +141,8 @@ export default function CinemaManagement() {
           </button>
         </div>
       </div>
-      <div className="bg-white shadow rounded-lg flex flex-col overflow-x-auto">
-        <div className="flex-1 overflow-y-auto">
+      <div className="bg-white shadow rounded-lg h-[500px] flex flex-col overflow-x-auto">
+        <div className="flex-1 overflow-y-auto min-h-0">
           <table className="min-w-full text-left text-sm">
             <thead>
               <tr className="bg-gray-200 text-sm">

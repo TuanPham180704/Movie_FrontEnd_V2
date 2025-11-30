@@ -155,7 +155,7 @@ export default function TicketManagement() {
       <ConfirmDeleteModal
         isOpen={isDeleteModalOpen}
         title="Xóa Vé"
-        message={`Bạn muốn xóa phòng "${selectedTicket?.movie_title}" - Ghế ${selectedTicket?.seat_number}?`}
+        message={`Bạn muốn xóa vé "${selectedTicket?.movie_title}" - Ghế ${selectedTicket?.seat_number}?`}
         onConfirm={handleConfirmDelete}
         onClose={() => setIsDeleteModalOpen(false)}
       />
