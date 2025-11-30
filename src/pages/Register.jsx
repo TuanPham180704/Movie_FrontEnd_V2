@@ -8,6 +8,7 @@ import logoWeb from "../assets/logoWeb.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../schemas/auth";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -20,8 +21,8 @@ export default function Register() {
       navigate("/login");
     },
     onError(err) {
-        console.error(err);
-        toast.error(err?.response?.data?.error || "Đăng ký thất bại");
+      console.error(err);
+      toast.error(err?.response?.data?.error || "Đăng ký thất bại");
     },
   });
 
@@ -105,6 +106,7 @@ export default function Register() {
                       : "focus:ring-2 focus:ring-yellow-400"
                   }`}
                 placeholder="Tên hiển thị"
+                autoComplete="username"
               />
               {errors.username && (
                 <p className="text-sm text-red-400 mt-1">
@@ -124,6 +126,7 @@ export default function Register() {
                       : "focus:ring-2 focus:ring-yellow-400"
                   }`}
                 placeholder="Email"
+                autoComplete="username"
               />
               {errors.email && (
                 <p className="text-sm text-red-400 mt-1">
@@ -143,6 +146,7 @@ export default function Register() {
                       : "focus:ring-2 focus:ring-yellow-400"
                   }`}
                 placeholder="Mật khẩu"
+                autoComplete="new-password"
               />
 
               <button
@@ -150,7 +154,7 @@ export default function Register() {
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute right-3 top-3 text-xl"
               >
-                {showPassword ? "🙈" : "👁"}
+                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
               </button>
 
               {errors.password && (
@@ -171,6 +175,7 @@ export default function Register() {
                       : "focus:ring-2 focus:ring-yellow-400"
                   }`}
                 placeholder="Nhập lại mật khẩu"
+                autoComplete="new-password"
               />
 
               <button
@@ -178,7 +183,7 @@ export default function Register() {
                 onClick={() => setShowConfirm((prev) => !prev)}
                 className="absolute right-3 top-3 text-xl"
               >
-                {showConfirm ? "🙈" : "👁"}
+                {showConfirm ? <AiFillEyeInvisible /> : <AiFillEye />}
               </button>
 
               {errors.confirmPassword && (

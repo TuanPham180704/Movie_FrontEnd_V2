@@ -9,7 +9,7 @@ import logoWeb from "../assets/logoWeb.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas/auth";
-
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 export default function Login() {
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -135,13 +135,14 @@ export default function Login() {
                         : "focus:ring-2 focus:ring-yellow-400"
                     }`}
                   placeholder="Nhập mật khẩu"
+                  autoComplete="new-password"
                 />
 
                 <span
                   className="absolute right-3 top-3 text-xl cursor-pointer select-none"
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
-                  {showPassword ? "🙈" : "👁"}
+                  {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
                 </span>
               </div>
 
