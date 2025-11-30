@@ -7,7 +7,13 @@ const api = axios.create({
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   },
 });
-
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 export const subscriptionPlanApi = {
   getAll: async () => {
     const res = await api.get("/admin/subscription-plans");
