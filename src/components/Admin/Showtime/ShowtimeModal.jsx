@@ -142,6 +142,14 @@ export default function ShowtimeModal({
           />
         </div>
 
+        {/* Giờ kết thúc */}
+        {mode === "view" && (
+          <div className="flex flex-col space-y-2 mb-4">
+            <label>Giờ kết thúc</label>
+            <span>{showtimeData?.end_time}</span>
+          </div>
+        )}
+
         {/* Giá vé */}
         <div className="flex flex-col space-y-2 mb-4">
           <label>Giá vé</label>

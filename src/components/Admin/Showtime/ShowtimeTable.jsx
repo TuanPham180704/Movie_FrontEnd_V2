@@ -9,7 +9,8 @@ export default function ShowtimeTable({ showtimes, onView, onEdit, onDelete }) {
           <th className="px-4 py-3">Rạp</th>
           <th className="px-4 py-3">Phòng</th>
           <th className="px-4 py-3">Ngày</th>
-          <th className="px-4 py-3">Giờ</th>
+          <th className="px-4 py-3">Giờ bắt đầu</th>
+          <th className="px-4 py-3">Giờ kết thúc</th>
           <th className="px-4 py-3 text-center">Giá vé</th>
           <th className="px-4 py-3 text-center w-32">Hành động</th>
         </tr>
@@ -39,6 +40,7 @@ export default function ShowtimeTable({ showtimes, onView, onEdit, onDelete }) {
                 {new Date(s.show_date).toLocaleDateString()}
               </td>
               <td className="px-4 py-3">{s.show_time}</td>
+              <td className="px-4 py-3">{s.end_time}</td>
 
               <td className="px-4 py-3 text-center font-semibold">
                 {s.ticket_price} ₫
@@ -73,7 +75,7 @@ export default function ShowtimeTable({ showtimes, onView, onEdit, onDelete }) {
           ))
         ) : (
           <tr>
-            <td colSpan={7} className="text-center py-8 text-gray-500">
+            <td colSpan={8} className="text-center py-8 text-gray-500">
               Không có dữ liệu
             </td>
           </tr>
