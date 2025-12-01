@@ -1,9 +1,9 @@
-// import { useParams } from "react-router-dom";
-// import MovieDetailPage from "../MovieDetailPage";
+import { useParams } from "react-router-dom";
+import MovieDetailTicket from "../MovieDetailTicket";
 
-// function MovieDetailPageWrapper() {
-//   const { slug } = useParams(); 
-//   return <MovieDetailPage movieId={slug} />;
-// }
+function MovieDetailPageWrapper() {
+  const { slug } = useParams();
+  return <MovieDetailTicket movieId={slug} />;
+}
 
-// export default MovieDetailPageWrapper;
+export default MovieDetailPageWrapper;

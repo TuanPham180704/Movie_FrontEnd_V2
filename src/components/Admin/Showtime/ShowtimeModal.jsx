@@ -69,8 +69,6 @@ export default function ShowtimeModal({
             ? "Thêm suất chiếu"
             : "Sửa suất chiếu"}
         </h2>
-
-        {/* Phim */}
         <div className="flex flex-col space-y-2 mb-4">
           <label>Phim</label>
           {mode === "view" ? (
@@ -91,8 +89,6 @@ export default function ShowtimeModal({
             </select>
           )}
         </div>
-
-        {/* Phòng / Rạp */}
         <div className="flex flex-col space-y-2 mb-4">
           <label>Phòng / Rạp</label>
           {mode === "view" ? (
@@ -115,8 +111,6 @@ export default function ShowtimeModal({
             </select>
           )}
         </div>
-
-        {/* Ngày chiếu */}
         <div className="flex flex-col space-y-2 mb-4">
           <label>Ngày chiếu</label>
           <input
@@ -128,8 +122,6 @@ export default function ShowtimeModal({
             className="border p-2 rounded"
           />
         </div>
-
-        {/* Giờ chiếu */}
         <div className="flex flex-col space-y-2 mb-4">
           <label>Giờ chiếu</label>
           <input
@@ -141,16 +133,12 @@ export default function ShowtimeModal({
             className="border p-2 rounded"
           />
         </div>
-
-        {/* Giờ kết thúc */}
         {mode === "view" && (
           <div className="flex flex-col space-y-2 mb-4">
             <label>Giờ kết thúc</label>
             <span>{showtimeData?.end_time}</span>
           </div>
         )}
-
-        {/* Giá vé */}
         <div className="flex flex-col space-y-2 mb-4">
           <label>Giá vé</label>
           {mode === "view" ? (
@@ -165,8 +153,6 @@ export default function ShowtimeModal({
             />
           )}
         </div>
-
-        {/* Buttons */}
         <div className="flex justify-end space-x-2">
           <button onClick={onClose} className="px-4 py-2 border rounded">
             Đóng
