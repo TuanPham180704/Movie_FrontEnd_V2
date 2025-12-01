@@ -25,6 +25,8 @@ import ShowtimeManagement from "../pages/Admin/ShowtimeManagement";
 import SubscriptionPlanManagement from "../pages/Admin/SubscriptionPlanManagement";
 import SettingsPage from "../pages/Admin/SettingsPage";
 import DevChillLandingPage from "../pages/Cinema/DevChillLandingPage";
+// import MovieDetailPageWrapper from "../pages/Cinema/Component/MovieDetailPageWrapper";
+
 export default function AppRouter() {
   return (
     <>
@@ -35,6 +37,7 @@ export default function AppRouter() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/booking" element={<DevChillLandingPage />} />
+            {/* <Route path="/movies/:slug" element={<MovieDetailPageWrapper />} /> */}
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/movies/phim-bo" element={<MovieList />} />

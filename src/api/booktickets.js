@@ -16,7 +16,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export const movieTicketApi = {
+export const booktickets = {
   getAllMovies: async (params) => {
     const res = await api.get("/admin/movies", { params });
     return res.data;

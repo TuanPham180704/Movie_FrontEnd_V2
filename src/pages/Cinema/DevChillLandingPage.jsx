@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { movieTicketApi } from "../../api/movieTicketApi";
-
+import { Link } from "react-router-dom";
 export default function DevChillLandingPage() {
   const [movies, setMovies] = useState([]);
   const [visibleCount, setVisibleCount] = useState(4);
@@ -102,38 +102,37 @@ export default function DevChillLandingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
               {(showAll ? movies : movies.slice(0, visibleCount)).map(
                 (movie) => (
-                  <div
-                    key={movie.id}
-                    className="bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-3xl"
-                  >
-                    <div className="relative">
-                      <img
-                        src={movie.poster_url}
-                        alt={movie.title}
-                        className="w-full h-80 object-cover"
-                      />
-                      <span className="absolute top-3 left-3 bg-purple-600 text-white font-semibold px-3 py-1 rounded-full text-sm">
-                        {movie.category.split(",")[0]}
-                      </span>
-                    </div>
-                    <div className="p-5 flex flex-col gap-2">
-                      <h3 className="font-bold text-lg text-gray-800 hover:text-purple-600 transition">
-                        {movie.title}
-                      </h3>
-                      <p className="text-gray-500 text-sm">
-                        {movie.category.split(",").join(" | ")}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-purple-600 font-semibold text-lg">
-                          ⭐ {movie.rating}
-                        </span>
-                        <span className="text-gray-600 text-sm">
-                          {Math.floor(movie.duration / 60)}h{" "}
-                          {movie.duration % 60}m
+                  <Link key={movie.id} to={`/movies/${movie.id}`}>
+                    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-3xl">
+                      <div className="relative">
+                        <img
+                          src={movie.poster_url}
+                          alt={movie.title}
+                          className="w-full h-80 object-cover"
+                        />
+                        <span className="absolute top-3 left-3 bg-purple-600 text-white font-semibold px-3 py-1 rounded-full text-sm">
+                          {movie.category.split(",")[0]}
                         </span>
                       </div>
+                      <div className="p-5 flex flex-col gap-3">
+                        <h3 className="font-bold text-lg text-gray-800 hover:text-purple-600 transition line-clamp-1">
+                          {movie.title}
+                        </h3>
+                        <p className="text-gray-500 text-sm line-clamp-1">
+                          {movie.category.split(",").join(" | ")}
+                        </p>
+                        <div className="flex items-center justify-between border-t pt-3">
+                          <span className="text-purple-600 font-semibold text-lg">
+                            ⭐ {movie.rating}
+                          </span>
+                          <span className="text-gray-600 text-sm">
+                            {Math.floor(movie.duration / 60)}h{" "}
+                            {movie.duration % 60}m
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 )
               )}
             </div>
