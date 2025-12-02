@@ -5,7 +5,7 @@ import QRCode from "react-qr-code";
 export default function TicketDetail() {
   const { state } = useLocation();
   const ticket = state?.ticket;
-  const [timeLeft, setTimeLeft] = useState(900); // 15 phút = 900 giây
+  const [timeLeft, setTimeLeft] = useState(900); 
 
   useEffect(() => {
     const timer = setInterval(() => {

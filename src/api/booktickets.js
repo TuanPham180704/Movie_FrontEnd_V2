@@ -56,4 +56,8 @@ export const booktickets = {
     const res = await api.get(`/admin/rooms/${roomId}/seats`);
     return res.data;
   },
+  getSeatsByShowtime: async (showtimeId) => {
+    const res = await api.get(`/showtimes/${showtimeId}/seats`);
+    return res.data;
+  },
 };

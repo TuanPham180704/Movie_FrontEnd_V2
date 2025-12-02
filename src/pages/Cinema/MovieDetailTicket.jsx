@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 import { booktickets } from "../../api/booktickets";
 import { userTicketApi } from "../../api/userTicketApi";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast} from "react-toastify";
 import QRCode from "react-qr-code";
 import { useNavigate } from "react-router-dom";
 
-// ------------------------------
-// Utils
-// ------------------------------
 const formatDateTime = (dateString) => {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
@@ -24,8 +20,6 @@ const formatDateTime = (dateString) => {
   });
   return `${datePart} ${timePart}`;
 };
-
-// Component countdown 15 phút
 const PaymentCountdown = ({ onTimeout }) => {
   const initialTime = 15 * 60;
   const [timeLeft, setTimeLeft] = useState(initialTime);
@@ -55,10 +49,6 @@ const PaymentCountdown = ({ onTimeout }) => {
     </div>
   );
 };
-
-// ------------------------------
-// Main Component
-// ------------------------------
 export default function MovieDetailPage({ movieId }) {
   const [movie, setMovie] = useState(null);
   const [cinemas, setCinemas] = useState([]);
@@ -74,8 +64,16 @@ export default function MovieDetailPage({ movieId }) {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-
-  // fetch data
+  const reloadSeats = async () => {
+    if (!selectedRoom) return;
+    try {
+      const data = await booktickets.getSeatsByRoomId(selectedRoom.id);
+      setSeats(data);
+    } catch (err) {
+      console.error(err);
+      toast.error("Không thể cập nhật ghế!");
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -99,8 +97,6 @@ export default function MovieDetailPage({ movieId }) {
     };
     fetchData();
   }, [movieId]);
-
-  // fetch seats khi chọn room
   useEffect(() => {
     if (!selectedRoom) return setSeats([]);
     const fetchSeats = async () => {
@@ -114,17 +110,14 @@ export default function MovieDetailPage({ movieId }) {
     };
     fetchSeats();
   }, [selectedRoom]);
-
   const toggleSeat = (seat) => {
-    if (seat.is_sold) return;
+    if (seat.status !== "available") return;
     setSelectedSeats((prev) =>
       prev.some((s) => s.id === seat.id)
         ? prev.filter((s) => s.id !== seat.id)
         : [...prev, seat]
     );
   };
-
-  // Mua vé (hiển thị thông tin chi tiết pending)
   const handleBookSeats = async () => {
     if (!selectedShowtime || selectedSeats.length === 0) {
       toast.warn("Chọn ghế trước khi mua vé!");
@@ -136,19 +129,40 @@ export default function MovieDetailPage({ movieId }) {
         showtime_id: selectedShowtime.id,
         seat_ids: seatIds,
       });
-      setBookingInfo(res);
+      await reloadSeats();
+
+      const ticketsWithDetails = res.tickets.map((t) => {
+        const seat = seats.find((s) => s.id === t.seat_id);
+        const room = rooms.find((r) => r.id === selectedShowtime.room_id);
+        return {
+          ...t,
+          movie_title: movie.title,
+          room_name: room?.name || "",
+          seat_number: seat?.seat_number || "",
+        };
+      });
+
+      setBookingInfo({ seats: ticketsWithDetails, status: "pending" });
+      setOpenSeatModal(true);
+      setSelectedSeats([]);
     } catch (err) {
       console.error(err);
       toast.error("Đặt vé thất bại!");
     }
   };
-
   const handlePayTicket = async () => {
-    if (!bookingInfo) return;
+    if (!bookingInfo || bookingInfo.seats.length === 0) return;
     try {
-      const res = await userTicketApi.pay(bookingInfo.id);
+      const res = await userTicketApi.pay(bookingInfo.seats[0].id);
+      await reloadSeats();
+      setBookingInfo((prev) => ({
+        ...prev,
+        seats: prev.seats.map((s) =>
+          s.id === res.ticket.id ? { ...s, status: res.ticket.status } : s
+        ),
+      }));
       toast.success("Thanh toán thành công!");
-      navigate(`/ticket/${bookingInfo.id}`);
+      navigate(`/tickets/${res.ticket.id}`);
     } catch (err) {
       console.error(err);
       toast.error("Thanh toán thất bại!");
@@ -167,25 +181,21 @@ export default function MovieDetailPage({ movieId }) {
     toast.error("Thời gian thanh toán đã hết! Vui lòng đặt lại vé.");
     setOpenSeatModal(false);
     setBookingInfo(null);
+    setSelectedSeats([]);
   };
 
   if (loading) return <p className="text-center mt-10">Đang tải...</p>;
 
   const roomsInCinema = rooms.filter((r) => r.cinema_id === selectedCinema?.id);
-
-  // --- Chuẩn bị sơ đồ ghế theo hàng (A,B,C...) ---
   const seatsByRow = {};
   seats.forEach((seat) => {
-    const row = seat.seat_number[0]; // A, B, C
+    const row = seat.seat_number[0];
     if (!seatsByRow[row]) seatsByRow[row] = [];
     seatsByRow[row].push(seat);
   });
 
   return (
     <div className="min-h-screen p-6 bg-gray-50 font-sans text-black">
-      <ToastContainer position="top-right" autoClose={2000} />
-
-      {/* Movie info */}
       {movie && (
         <section className="max-w-6xl mx-auto bg-white p-8 rounded-3xl shadow-xl">
           <div className="flex flex-col md:flex-row gap-8">
@@ -214,8 +224,6 @@ export default function MovieDetailPage({ movieId }) {
           </div>
         </section>
       )}
-
-      {/* Chọn rạp */}
       <section className="max-w-6xl mx-auto mt-6 p-6 bg-white rounded-3xl shadow-xl">
         <h2 className="text-2xl font-bold mb-4">Chọn rạp</h2>
         <select
@@ -239,8 +247,6 @@ export default function MovieDetailPage({ movieId }) {
           ))}
         </select>
       </section>
-
-      {/* Suất chiếu */}
       {selectedCinema && (
         <section className="max-w-6xl mx-auto mt-6 p-6 bg-white rounded-3xl shadow-xl">
           <h2 className="text-2xl font-bold mb-4">Suất chiếu</h2>
@@ -267,8 +273,6 @@ export default function MovieDetailPage({ movieId }) {
           </div>
         </section>
       )}
-
-      {/* Modal ghế & chi tiết vé */}
       {openSeatModal && selectedRoom && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-auto">
           <div className="bg-white rounded-2xl p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
@@ -280,12 +284,12 @@ export default function MovieDetailPage({ movieId }) {
 
             {!bookingInfo ? (
               <>
-                {/* Chọn ghế */}
                 <div className="text-center mb-4 text-gray-700">
                   <div className="p-2 border-b-4 border-gray-600 inline-block mb-4 w-3/4 font-semibold">
                     Màn hình
                   </div>
                 </div>
+
                 <div className="flex flex-col gap-2">
                   {Object.keys(seatsByRow)
                     .sort()
@@ -301,27 +305,40 @@ export default function MovieDetailPage({ movieId }) {
                             const isSelected = selectedSeats.some(
                               (s) => s.id === seat.id
                             );
-                            let bg = "bg-pink-200 hover:bg-pink-300";
-                            let hover = "hover:bg-pink-300";
-                            if (seat.is_sold) {
+                            const isUnavailable =
+                              seat.status === "reserved" ||
+                              seat.status === "broken";
+                            let bg = "",
+                              hover = "hover:brightness-105";
+
+                            if (isUnavailable) {
                               bg = "bg-gray-400 cursor-not-allowed";
                               hover = "";
+                            } else if (isSelected) {
+                              bg = "bg-pink-500 text-white";
+                            } else {
+                              switch (seat.seat_type) {
+                                case "vip":
+                                  bg = "bg-red-500 text-white";
+                                  break;
+                                case "couple":
+                                  bg = "bg-pink-200";
+                                  break;
+                                default:
+                                  bg = "bg-purple-400 text-white";
+                              }
                             }
-                            if (isSelected) {
-                              bg =
-                                "bg-purple-600 text-white hover:bg-purple-700";
-                              hover = "hover:bg-purple-700";
-                            }
+
                             return (
                               <button
                                 key={seat.id}
                                 className={`${bg} ${hover} w-10 h-10 rounded text-sm font-semibold transition duration-150 ease-in-out`}
                                 onClick={() => toggleSeat(seat)}
-                                disabled={seat.is_sold}
+                                disabled={isUnavailable}
                                 title={
-                                  seat.is_sold
-                                    ? "Ghế đã bán"
-                                    : `Ghế ${seat.seat_number}`
+                                  isUnavailable
+                                    ? "Ghế đã bán / hỏng"
+                                    : `Ghế ${seat.seat_number} - ${seat.seat_type}`
                                 }
                               >
                                 {seat.seat_number}
@@ -330,6 +347,37 @@ export default function MovieDetailPage({ movieId }) {
                           })}
                       </div>
                     ))}
+                  <div className="mt-6 flex flex-wrap gap-6 justify-center text-sm text-gray-800">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 bg-gray-500 rounded"></div>
+                      <span>Đã đặt</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 bg-pink-500 rounded border-2 border-white"></div>
+                      <span>Ghế bạn chọn</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 bg-purple-500 rounded"></div>
+                      <span>Ghế thường</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 bg-red-500 rounded"></div>
+                      <span>Ghế VIP</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 bg-pink-300 rounded"></div>
+                      <span>Ghế Sweetbox</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded border border-green-500"></div>
+                      <span>Vùng trung tâm</span>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="mt-6 flex justify-between items-center border-t pt-4">
@@ -364,46 +412,54 @@ export default function MovieDetailPage({ movieId }) {
               </>
             ) : (
               <>
-                {/* Chi tiết vé pending */}
                 <div className="flex flex-col md:flex-row gap-6 items-start border-b pb-4 mb-4">
                   <div className="flex-1 space-y-3 text-black">
                     <h3 className="text-xl font-bold text-red-600 border-b pb-2 mb-2">
                       Vui lòng thanh toán để hoàn tất đặt vé
                     </h3>
                     <p>
-                      Phim: <b>{bookingInfo.movie_title}</b>
+                      Phim: <b>{bookingInfo.seats[0].movie_title}</b>
                     </p>
                     <p>
-                      Rạp: <b>{bookingInfo.room_name}</b>
+                      Rạp: <b>{bookingInfo.seats[0].room_name}</b>
                     </p>
                     <p>
-                      Ghế: <b>{bookingInfo.seat_number}</b>
+                      Ghế:{" "}
+                      <b>
+                        {bookingInfo.seats.map((s) => s.seat_number).join(", ")}
+                      </b>
                     </p>
                     <p>
                       Ngày giờ:{" "}
-                      <b>{formatDateTime(bookingInfo.booking_date)}</b>
+                      <b>{formatDateTime(bookingInfo.seats[0].booking_date)}</b>
                     </p>
                     <p>
                       Trạng thái:{" "}
                       <b className="text-orange-500">
-                        {bookingInfo.status === "pending"
+                        {bookingInfo.seats[0].status === "pending"
                           ? "Chờ thanh toán"
-                          : bookingInfo.status}
+                          : bookingInfo.seats[0].status}
                       </b>
                     </p>
                     <p className="text-sm text-gray-500">
-                      Mã vé: <b className="text-gray-800">{bookingInfo.id}</b>
+                      Mã vé:{" "}
+                      <b className="text-gray-800">
+                        {bookingInfo.seats.map((s) => s.id).join(", ")}
+                      </b>
                     </p>
-                    {bookingInfo.status === "pending" && (
-                      <div className="pt-4">
-                        <PaymentCountdown onTimeout={handlePaymentTimeout} />
-                      </div>
+                    {bookingInfo.seats[0].status === "pending" && (
+                      <PaymentCountdown onTimeout={handlePaymentTimeout} />
                     )}
                   </div>
 
                   <div className="flex-1 flex justify-center items-center w-full md:w-auto">
                     <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
-                      <QRCode value={`ticket-${bookingInfo.id}`} size={180} />
+                      <QRCode
+                        value={`ticket-${bookingInfo.seats
+                          .map((s) => s.id)
+                          .join(",")}`}
+                        size={180}
+                      />
                       <p className="text-center text-xs mt-2 text-gray-500">
                         Quét mã để xác nhận
                       </p>
@@ -412,7 +468,7 @@ export default function MovieDetailPage({ movieId }) {
                 </div>
 
                 <div className="mt-4 flex justify-end gap-4">
-                  {bookingInfo.status === "pending" && (
+                  {bookingInfo.seats[0].status === "pending" && (
                     <button
                       onClick={handlePayTicket}
                       className="px-6 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition duration-150"
