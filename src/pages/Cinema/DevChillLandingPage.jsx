@@ -102,7 +102,7 @@ export default function DevChillLandingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
               {(showAll ? movies : movies.slice(0, visibleCount)).map(
                 (movie) => (
-                  <Link key={movie.id} to={`/movies/${movie.id}`}>
+                  <Link key={movie.id} to={`/movies/tickets/${movie.id}`}>
                     <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-3xl">
                       <div className="relative">
                         <img

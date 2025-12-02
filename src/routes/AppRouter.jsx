@@ -37,7 +37,10 @@ export default function AppRouter() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/booking" element={<DevChillLandingPage />} />
-            <Route path="/movies/:slug" element={<MovieDetailPageWrapper />} />
+            <Route
+              path="/movies/tickets/:slug"
+              element={<MovieDetailPageWrapper />}
+            />
             <Route path="/tickets/:ticketId" element={<TicketDetailPage />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
