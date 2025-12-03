@@ -150,8 +150,6 @@ export default function DevChillLandingPage() {
           </>
         )}
       </section>
-
-      {/* Top Bình Luận */}
       <section className="max-w-5xl mx-auto p-10 mt-20 bg-white rounded-3xl shadow-xl">
         <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
           Top Bình Luận
@@ -175,8 +173,6 @@ export default function DevChillLandingPage() {
           ))}
         </div>
       </section>
-
-      {/* Top Phim Hay */}
       <section className="max-w-6xl mx-auto p-10 mt-20">
         <h2 className="text-3xl font-bold mb-10 text-gray-800 text-center">
           Top Phim Hay
@@ -201,8 +197,6 @@ export default function DevChillLandingPage() {
           ))}
         </div>
       </section>
-
-      {/* Blog */}
       <section className="max-w-5xl mx-auto p-10 mt-20 bg-white rounded-3xl shadow-xl">
         <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
           Blog về Phim Ảnh
@@ -220,8 +214,6 @@ export default function DevChillLandingPage() {
           ))}
         </div>
       </section>
-
-      {/* Tin Tức & Khuyến Mãi */}
       <section className="max-w-5xl mx-auto p-10 mt-20 bg-white rounded-3xl shadow-xl mb-20">
         <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
           Tin Tức & Khuyến Mãi
@@ -237,6 +229,32 @@ export default function DevChillLandingPage() {
               <p className="text-gray-500 mt-2">Xem chi tiết &rarr;</p>
             </a>
           ))}
+        </div>
+      </section>
+      <section className="max-w-5xl mx-auto p-10 mt-20 bg-pink-100 text-black rounded-3xl shadow-lg">
+        <h2 className="text-3xl font-bold mb-10 text-center">
+          Quy Định Rạp DevChill
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 leading-7">
+          <div className="space-y-5">
+            <p>
+              • Đến trước giờ chiếu ít nhất 10 phút để đảm bảo trải nghiệm
+              chung.
+            </p>
+            <p>
+              • Không mang đồ nặng mùi, đồ uống có cồn hoặc vật dụng gây ồn vào
+              rạp.
+            </p>
+            <p>• Tuyệt đối không quay phim, ghi âm hay chụp màn hình.</p>
+          </div>
+          <div className="space-y-5">
+            <p>
+              • Giữ trật tự, hạn chế nói chuyện và không sử dụng điện thoại phát
+              sáng.
+            </p>
+            <p>• Giữ vệ sinh chung, bỏ rác đúng nơi quy định.</p>
+            <p>• Nếu gặp sự cố kỹ thuật, báo ngay nhân viên để được hỗ trợ.</p>
+          </div>
         </div>
       </section>
 
