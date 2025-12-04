@@ -154,6 +154,9 @@ export default function MovieDetailPage({ movieId }) {
   if (loading) return <p className="text-center mt-10">Đang tải...</p>;
 
   const roomsInCinema = rooms.filter((r) => r.cinema_id === selectedCinema?.id);
+  const showtimesInCinema = showtimes
+    .filter((s) => roomsInCinema.some((r) => r.id === s.room_id))
+    .filter((s) => Number(s.movie_id) === Number(movieId));
 
   return (
     <div className="min-h-screen p-6 bg-gray-50 font-sans text-black">
@@ -172,7 +175,7 @@ export default function MovieDetailPage({ movieId }) {
       />
       {selectedCinema && (
         <ShowtimeList
-          showtimes={showtimes}
+          showtimes={showtimesInCinema}
           rooms={rooms}
           roomsInCinema={roomsInCinema}
           selectedShowtime={selectedShowtime}
