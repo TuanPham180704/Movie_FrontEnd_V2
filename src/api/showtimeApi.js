@@ -39,4 +39,5 @@ export const showtimeApi = {
     const res = await api.delete(`/admin/showtimes/${id}`);
     return res.data;
   },
+  
 };

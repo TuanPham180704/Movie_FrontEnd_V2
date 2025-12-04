@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { booktickets } from "../../api/booktickets";
 import { userTicketApi } from "../../api/userTicketApi";
-import { toast} from "react-toastify";
+import { toast } from "react-toastify";
 import QRCode from "react-qr-code";
 import { useNavigate } from "react-router-dom";
 
@@ -82,7 +82,7 @@ export default function MovieDetailPage({ movieId }) {
             booktickets.getMovieById(movieId),
             booktickets.getAllCinemas(),
             booktickets.getAllRooms(),
-            booktickets.getAllShowtimes({ movie_id: movieId }),
+            booktickets.getUpcoming({ movie_id: movieId }),
           ]);
         setMovie(movieData);
         setCinemas(cinemasData);
