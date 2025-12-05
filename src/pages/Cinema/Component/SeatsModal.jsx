@@ -11,8 +11,6 @@ export default function SeatsModal({ seats, room, onClose }) {
         : [...prev, seat.seat_number]
     );
   };
-
-  // Nhóm ghế theo hàng
   const rows = {};
   seats.forEach((seat) => {
     const row = seat.seat_number[0];

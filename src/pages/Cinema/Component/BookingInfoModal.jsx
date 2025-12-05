@@ -9,7 +9,7 @@ export default function BookingInfoModal({
   onTimeout,
 }) {
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-auto">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-auto">
       <div className="bg-white rounded-2xl p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
         <div className="flex flex-col md:flex-row gap-6 items-start border-b pb-4 mb-4">
           <div className="flex-1 space-y-3 text-black">

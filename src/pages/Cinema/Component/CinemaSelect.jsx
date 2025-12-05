@@ -5,9 +5,9 @@ export default function CinemaSelect({
 }) {
   return (
     <section className="max-w-6xl mx-auto mt-6 p-6 bg-white rounded-3xl shadow-xl">
-      <h2 className="text-2xl font-bold mb-4">Chọn rạp</h2>
+      <h2 className="text-2xl font-bold mb-4 text-pink-700">Chọn rạp</h2>
       <select
-        className="border p-2 rounded-lg w-64 text-blue-600"
+        className="border p-2 rounded-lg w-64 text-pink-600"
         value={selectedCinema?.id || ""}
         onChange={(e) => {
           const c = cinemas.find((c) => c.id === Number(e.target.value));

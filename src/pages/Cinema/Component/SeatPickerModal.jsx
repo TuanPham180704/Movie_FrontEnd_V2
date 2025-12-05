@@ -16,7 +16,7 @@ export default function SeatPickerModal({
   });
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-auto">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-auto">
       <div className="bg-white rounded-2xl p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
         <h2 className="text-2xl font-bold mb-4">
           Chọn ghế - {roomName} ({cinemaName})
