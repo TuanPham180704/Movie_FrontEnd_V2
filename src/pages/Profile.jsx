@@ -8,6 +8,7 @@ import { removeToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ChangePassword from "../components/Client/ChangePassword";
+import Sidebar from "./Client/SideBar";
 import {
   FaHeart,
   FaListUl,
@@ -114,61 +115,7 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-[#121212] text-white flex justify-center py-10">
       <div className="flex gap-10 w-10/12">
-        <aside className="bg-[#1A1A1A] w-80 rounded-2xl p-6 flex flex-col justify-between">
-          <div>
-            <h2 className="text-lg font-semibold mb-6">Quản lý tài khoản</h2>
-            <ul className="space-y-4">
-              <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
-                <FaHeart className="text-white-400" /> Yêu thích
-              </li>
-              <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
-                <FaListUl className="text-white-400" /> Danh sách
-              </li>
-              <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
-                <FaHistory className="text-white-400" /> Xem tiếp
-              </li>
-              <li className="flex items-center gap-3 text-gray-300 hover:text-white cursor-pointer">
-                <FaBell className="text-white-400" /> Thông báo
-              </li>
-              <li className="flex items-center gap-3 text-yellow-400 font-medium cursor-pointer">
-                <FaUser /> Tài khoản
-              </li>
-            </ul>
-          </div>
-          <div className="border-t border-gray-700 pt-4">
-            <div className="flex items-center gap-3">
-              <img
-                src={
-                  user.avatar_url ||
-                  "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                }
-                id="sidebar-avatar"
-                alt="avatar"
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <div>
-                <p className="font-semibold " id="sidebar-username">
-                  {user.username}
-                </p>
-                {user.is_premium && (
-                  <span className="text-yellow-400 text-sm">🌟 Premium</span>
-                )}
-                <p
-                  className="text-gray-400 text-sm pointer-events-none opacity-50 cursor-not-allowed "
-                  id="sidebar-email"
-                >
-                  {user.email}
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 mt-4 text-gray-400 hover:text-white"
-            >
-              <FaSignOutAlt /> Thoát
-            </button>
-          </div>
-        </aside>
+        <Sidebar user={user} onLogout={handleLogout} active="profile" />
         <main className="flex-1 bg-[#1A1A1A] rounded-2xl p-8">
           <h2 className="text-xl font-semibold mb-2">Tài khoản</h2>
           <p className="text-gray-400 mb-8">Cập nhật thông tin tài khoản</p>
