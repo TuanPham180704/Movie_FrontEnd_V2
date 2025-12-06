@@ -13,6 +13,7 @@ import Profile from "../pages/Profile";
 import NotFound from "../pages/NotFound";
 import ForgotPassword from "../components/Client/ForgotPassword";
 import ResetPassword from "../components/Client/ResetPassword";
+import TicketsPage from "../pages/Client/Tickets_User/TicketsPage";
 
 import AdminLayout from "../layouts/AdminLayout";
 import Dashboard from "../pages/Admin/Dashboard";
@@ -59,6 +60,7 @@ export default function AppRouter() {
           <Route element={<ProtectedRoute roles={["user"]} />}>
             <Route element={<AppLayout />}>
               <Route path="/profile" element={<Profile />} />
+              <Route path="/my-tickets" element={<TicketsPage />} />
             </Route>
           </Route>
 

@@ -1,7 +1,41 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaUser, FaTicketAlt, FaCrown, FaSignOutAlt } from "react-icons/fa";
+import { getProfileApi } from "../../api/authApi";
+import { toast } from "react-toastify";
 
-export default function Sidebar({ user, onLogout, active = "profile" }) {
+export default function Sidebar({
+  user: propUser,
+  onLogout,
+  active = "profile",
+}) {
+  const [user, setUser] = useState(propUser || null);
+  const [loading, setLoading] = useState(!propUser);
+
+  useEffect(() => {
+    if (!propUser) {
+      const fetchUser = async () => {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          toast.error("Bạn chưa đăng nhập!");
+          setLoading(false);
+          return;
+        }
+        try {
+          const data = await getProfileApi(token);
+          setUser(data);
+        } catch (err) {
+          console.error(err);
+          toast.error("Không thể tải thông tin user!");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchUser();
+    }
+  }, [propUser]);
+
   const menuItems = [
     {
       id: "profile",
@@ -47,24 +81,28 @@ export default function Sidebar({ user, onLogout, active = "profile" }) {
       </div>
 
       <div className="border-t border-gray-700 pt-4">
-        <div className="flex items-center gap-3">
-          <img
-            src={
-              user.avatar_url ||
-              "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-            }
-            alt="avatar"
-            className="w-12 h-12 rounded-full object-cover"
-          />
+        {loading ? (
+          <p className="text-gray-400">Đang tải thông tin...</p>
+        ) : (
+          <div className="flex items-center gap-3">
+            <img
+              src={
+                user?.avatar_url ||
+                "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              }
+              alt="avatar"
+              className="w-12 h-12 rounded-full object-cover"
+            />
 
-          <div>
-            <p className="font-semibold">{user.username}</p>
-            {user.is_premium && (
-              <span className="text-yellow-400 text-sm">🌟 Premium</span>
-            )}
-            <p className="text-gray-400 text-sm">{user.email}</p>
+            <div>
+              <p className="font-semibold">{user?.username || "Người dùng"}</p>
+              {user?.is_premium && (
+                <span className="text-yellow-400 text-sm">🌟 Premium</span>
+              )}
+              <p className="text-gray-400 text-sm">{user?.email || ""}</p>
+            </div>
           </div>
-        </div>
+        )}
 
         <button
           onClick={onLogout}

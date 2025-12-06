@@ -9,14 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ChangePassword from "../components/Client/ChangePassword";
 import Sidebar from "./Client/SideBar";
-import {
-  FaHeart,
-  FaListUl,
-  FaHistory,
-  FaBell,
-  FaUser,
-  FaSignOutAlt,
-} from "react-icons/fa";
+
 
 export default function Profile() {
   const [user, setUser] = useState(null);
