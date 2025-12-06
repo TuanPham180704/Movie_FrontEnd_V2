@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function ShowtimeModal({
   isOpen,
@@ -52,12 +52,17 @@ export default function ShowtimeModal({
       return alert("Vui lòng điền đầy đủ thông tin");
     }
     if (Number(form.ticket_price) < 0) return alert("Giá vé không được âm");
+
     onSubmit({ ...form, ticket_price: Number(form.ticket_price) });
   };
 
   if (!isOpen) return null;
 
-  const selectedRoom = rooms.find((r) => r.id === form.room_id);
+  const selectedRoom = rooms.find((r) => r.id === Number(form.room_id));
+  const soldSeats = showtimeData?.soldSeats ?? 0;
+  const totalSeats = showtimeData?.totalSeats ?? 0;
+  const occupancy =
+    totalSeats > 0 ? ((soldSeats / totalSeats) * 100).toFixed(1) : 0;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -72,7 +77,9 @@ export default function ShowtimeModal({
         <div className="flex flex-col space-y-2 mb-4">
           <label>Phim</label>
           {mode === "view" ? (
-            <span>{movies.find((m) => m.id === form.movie_id)?.title}</span>
+            <span>
+              {movies.find((m) => m.id === Number(form.movie_id))?.title}
+            </span>
           ) : (
             <select
               name="movie_id"
@@ -137,6 +144,14 @@ export default function ShowtimeModal({
           <div className="flex flex-col space-y-2 mb-4">
             <label>Giờ kết thúc</label>
             <span>{showtimeData?.end_time}</span>
+          </div>
+        )}
+        {mode === "view" && (
+          <div className="flex flex-col space-y-2 mb-4">
+            <label>Tình trạng ghế</label>
+            <span>
+              Đã bán: <b>{soldSeats}</b> / {totalSeats} (<b>{occupancy}%</b>)
+            </span>
           </div>
         )}
         <div className="flex flex-col space-y-2 mb-4">

@@ -11,6 +11,10 @@ export default function ShowtimeTable({ showtimes, onView, onEdit, onDelete }) {
           <th className="px-4 py-3">Ngày</th>
           <th className="px-4 py-3">Giờ bắt đầu</th>
           <th className="px-4 py-3">Giờ kết thúc</th>
+
+          {/* 👉 Thêm cột ghế */}
+          <th className="px-4 py-3 text-center">Ghế</th>
+
           <th className="px-4 py-3 text-center">Giá vé</th>
           <th className="px-4 py-3 text-center w-32">Hành động</th>
         </tr>
@@ -39,11 +43,19 @@ export default function ShowtimeTable({ showtimes, onView, onEdit, onDelete }) {
               <td className="px-4 py-3">
                 {new Date(s.show_date).toLocaleDateString()}
               </td>
+
               <td className="px-4 py-3">{s.show_time}</td>
               <td className="px-4 py-3">{s.end_time}</td>
 
+              {/* 👉 Hiển thị ghế đã bán / tổng ghế */}
               <td className="px-4 py-3 text-center font-semibold">
-                {s.ticket_price} ₫
+                <span className="text-green-600">{s.soldSeats}</span>
+                {" / "}
+                <span className="text-gray-800">{s.totalSeats}</span>
+              </td>
+
+              <td className="px-4 py-3 text-center font-semibold">
+                {parseInt(s.ticket_price).toLocaleString()} ₫
               </td>
 
               <td className="px-4 py-3 text-center">
@@ -55,6 +67,7 @@ export default function ShowtimeTable({ showtimes, onView, onEdit, onDelete }) {
                   >
                     <AiOutlineEye size={18} />
                   </button>
+
                   <button
                     onClick={() => onEdit(s)}
                     className="p-2 bg-yellow-50 text-yellow-600 rounded hover:bg-yellow-100 transition"
@@ -62,6 +75,7 @@ export default function ShowtimeTable({ showtimes, onView, onEdit, onDelete }) {
                   >
                     <AiOutlineEdit size={18} />
                   </button>
+
                   <button
                     onClick={() => onDelete(s)}
                     className="p-2 bg-red-50 text-red-600 rounded hover:bg-red-100 transition"
@@ -75,7 +89,7 @@ export default function ShowtimeTable({ showtimes, onView, onEdit, onDelete }) {
           ))
         ) : (
           <tr>
-            <td colSpan={8} className="text-center py-8 text-gray-500">
+            <td colSpan={9} className="text-center py-8 text-gray-500">
               Không có dữ liệu
             </td>
           </tr>
