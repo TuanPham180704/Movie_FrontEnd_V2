@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { userTicketApi } from "../../../api/userTicketApi";
+import QRCode from "react-qr-code";
 
 export default function TicketModal({ ticket, onClose, refresh }) {
   const [loading, setLoading] = useState(false);
@@ -18,8 +19,12 @@ export default function TicketModal({ ticket, onClose, refresh }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-[#1A1A1A] rounded-xl max-w-md w-full p-5 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div
+        className="absolute inset-0 bg-black bg-opacity-50"
+        onClick={onClose}
+      ></div>
+      <div className="relative bg-[#1A1A1A] rounded-xl max-w-md w-full p-5 z-10 shadow-lg">
         <button
           className="absolute top-2 right-2 text-gray-400 hover:text-white"
           onClick={onClose}
@@ -50,16 +55,24 @@ export default function TicketModal({ ticket, onClose, refresh }) {
             ? "Chờ Thanh Toán"
             : "Đã Hủy"}
         </p>
-
-        <div className="mt-4 flex justify-center">
-          {ticket.status === "paid" ? (
-            <div className="p-4 border rounded text-center">
-              <p className="mb-2">Quét QR để checkin</p>
-              <div className="w-32 h-32 bg-gray-700 flex items-center justify-center">
-                QR
-              </div>
+        <div className="mt-4 flex flex-col items-center gap-3">
+          {(ticket.status === "paid" || ticket.status === "pending") && (
+            <div className="p-4 border rounded text-center bg-[#2A2A2A]">
+              <p className="mb-2 font-medium text-gray-200">
+                {ticket.status === "paid"
+                  ? "Quét QR để checkin"
+                  : "QR chờ thanh toán"}
+              </p>
+              <QRCode
+                value={`ticket-${ticket.id}`}
+                size={128}
+                className="mx-auto"
+                bgColor="#1A1A1A"
+                fgColor="#ffffff"
+              />
             </div>
-          ) : ticket.status === "pending" ? (
+          )}
+          {ticket.status === "pending" && (
             <button
               onClick={handlePay}
               disabled={loading}
@@ -67,7 +80,8 @@ export default function TicketModal({ ticket, onClose, refresh }) {
             >
               {loading ? "Đang thanh toán..." : "Thanh toán"}
             </button>
-          ) : (
+          )}
+          {ticket.status === "cancelled" && (
             <p className="text-red-500 font-semibold">Vé đã hủy</p>
           )}
         </div>

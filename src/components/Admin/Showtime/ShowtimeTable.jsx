@@ -11,8 +11,6 @@ export default function ShowtimeTable({ showtimes, onView, onEdit, onDelete }) {
           <th className="px-4 py-3">Ngày</th>
           <th className="px-4 py-3">Giờ bắt đầu</th>
           <th className="px-4 py-3">Giờ kết thúc</th>
-
-          {/* 👉 Thêm cột ghế */}
           <th className="px-4 py-3 text-center">Ghế</th>
 
           <th className="px-4 py-3 text-center">Giá vé</th>
