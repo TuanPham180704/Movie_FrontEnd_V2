@@ -30,16 +30,18 @@ export default function DevChillLandingPage() {
         "Sau mỗi trận bóng tôi luôn chọn trải nghiệm rạp DevChill để giải trí!",
     },
     {
-      user: "Nguyễn Thị Lan Anh",
+      user: "Dũng Lại Lập Trình",
       avatar:
-        "https://scontent.fdad1-3.fna.fbcdn.net/v/t39.30808-6/493528231_1331875951407585_6656477031045095356_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHRyrrvQfff9vcZ7KpTrj4Tzcpn61WPKDPNymfrVY8oM3EjhHhfl1QZJra4eM-_sfYqsuAEGkYKYS-AbrsLkser&_nc_ohc=S7t0moIQMKUQ7kNvwEyewsB&_nc_oc=Adm89DTfSX_VHP-FjHt4e-qJBKkDjfnyKNVOXlN8Z5LR1tjpZfhFRUqd_NAH2eGbf59AjOsHPPCkessMINAz-jM8&_nc_zt=23&_nc_ht=scontent.fdad1-3.fna&_nc_gid=A5ze8kJdIMuihwLTgGhDvg&oh=00_AfhIiK68gy0lajU1J0vh1GlqA-eTLD4ESp9Ink6I0UNseA&oe=693232FD",
-      comment: "Ghế êm, âm thanh sống động, không gian đẹp!",
+        "https://scontent.fdad1-3.fna.fbcdn.net/v/t39.30808-6/480611892_1190277999636090_6535903059927968272_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Gy8IzwtL_zwQ7kNvwGlFb1w&_nc_oc=AdmsHOjQYOE-342DiDx3psIq_rIOkRYe1GXKXsCPyIoJYHgAjRUgBTpKHSm05JkQHHrKS3BCrAXxStC1Jsvd_S8n&_nc_zt=23&_nc_ht=scontent.fdad1-3.fna&_nc_gid=8AYSGeudqD7P9BJvncnj3w&oh=00_AfkRFoHwCDs7xWMEZMT2sODKwHRrbdMoxTjDSeEyrV5EAA&oe=693A3BBA",
+      comment:
+        "Một ngày code và dạy học mệt mõi thì chỉ có DevChill làm cho tôi giải tỏa được căng thẳng",
     },
     {
       user: "Trần Hà Linh",
       avatar:
         "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/540450845_1472881710415213_8508038144623935236_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEIwboGSGGezTLEYcx6YvFNnE0VmfxZRBacTRWZ_FlEFvLx0XD8rvN9x4n2oxZmr5X5Rsvh6fcAITbe20v30aL4&_nc_ohc=V2HVfaNbvkMQ7kNvwG0TOnw&_nc_oc=AdlsQni4IjfqTFCTK0EvsC4DvS8j9i0jJT-pvLsGy2HAZiiYueYc3a5Ce2lewK9uf-bWswgHzd3wSJ_neKWll0Ue&_nc_zt=23&_nc_ht=scontent.fdad1-4.fna&_nc_gid=hmUByvn0rFW8JcMzdFe5nQ&oh=00_AfgH41IAZISa5qsr-9OPtstvYm-oxPtoClmeLaIePtrqTg&oe=69322EA0",
-      comment: "Mình luôn chọn DevChill cho cuối tuần.",
+      comment:
+        "Mình luôn chọn DevChill cho cuối tuần sau mỗi lần lên mạng nhảy toe toe.",
     },
   ];
 
