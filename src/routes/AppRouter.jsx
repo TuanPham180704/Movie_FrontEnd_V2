@@ -28,6 +28,8 @@ import SettingsPage from "../pages/Admin/SettingsPage";
 import DevChillLandingPage from "../pages/Cinema/DevChillLandingPage";
 import MovieDetailPageWrapper from "../pages/Cinema/Component/MovieDetailPageWrapper";
 import TicketDetailPage from "../pages/Cinema/Component/TicketDetailPage";
+import PremiumLandingPage from "../pages/Client/Premium/PremiumLandingPage";
+import MyPremiumPage from "../pages/Client/Premium/MyPremiumPage";
 export default function AppRouter() {
   return (
     <>
@@ -61,6 +63,8 @@ export default function AppRouter() {
             <Route element={<AppLayout />}>
               <Route path="/profile" element={<Profile />} />
               <Route path="/my-tickets" element={<TicketsPage />} />
+              <Route path="/my-premium" element={<MyPremiumPage />} />
+              <Route path="/premium" element={<PremiumLandingPage />} />
             </Route>
           </Route>
 

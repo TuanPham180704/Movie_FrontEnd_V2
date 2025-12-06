@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import Banner from "../components/Banner";
 import DevChillApp from "../components/DevChillApp";
 import ChatBot from "../components/ChatBot";
-
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [chinaMovies, setChinaMovies] = useState([]);

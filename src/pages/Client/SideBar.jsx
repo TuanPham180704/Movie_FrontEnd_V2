@@ -50,7 +50,7 @@ export default function Sidebar({
       path: "/my-tickets",
     },
     {
-      id: "premium",
+      id: "my-premium",
       icon: <FaCrown />,
       label: "Gói đã mua",
       path: "/my-premium",

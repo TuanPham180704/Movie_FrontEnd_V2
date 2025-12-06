@@ -3,7 +3,7 @@ import Sidebar from "../SideBar";
 import TicketTabs from "./TicketTabs";
 import TicketList from "./TicketList";
 import TicketModal from "./TicketModal";
-import Pagination from "./Pagination";
+import Pagination from "../Pagination";
 import { userTicketApi } from "../../../api/userTicketApi";
 import { toast } from "react-toastify";
 
