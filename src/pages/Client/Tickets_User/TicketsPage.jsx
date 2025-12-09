@@ -9,18 +9,46 @@ import { toast } from "react-toastify";
 
 export default function TicketsPage() {
   const [tickets, setTickets] = useState([]);
+  const [ticketGroups, setTicketGroups] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [loadingTickets, setLoadingTickets] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const ticketsPerPage = 6;
+
+  const groupTickets = (ticketData) => {
+    const groupsMap = {};
+
+    ticketData.forEach((ticket) => {
+      const groupId = ticket.group_id ?? `single-${ticket.id}`; 
+      if (!groupsMap[groupId]) {
+        groupsMap[groupId] = {
+          group_id: ticket.group_id,
+          tickets: [],
+          movie_title: ticket.movie_title,
+          poster_url: ticket.poster_url,
+          room_name: ticket.room_name,
+          booking_date: ticket.booking_date,
+          status: ticket.status,
+          totalPrice: 0,
+        };
+      }
+      groupsMap[groupId].tickets.push(ticket);
+      groupsMap[groupId].totalPrice += parseFloat(ticket.price);
+      if (ticket.status === "pending") groupsMap[groupId].status = "pending";
+    });
+
+    return Object.values(groupsMap);
+  };
+
   useEffect(() => {
     const fetchTickets = async () => {
       setLoadingTickets(true);
       try {
         const ticketData = await userTicketApi.getAll();
         setTickets(ticketData);
+        setTicketGroups(groupTickets(ticketData));
       } catch (error) {
         console.error(error);
         toast.error("Không thể tải vé!");
@@ -36,6 +64,7 @@ export default function TicketsPage() {
     try {
       const ticketData = await userTicketApi.getAll();
       setTickets(ticketData);
+      setTicketGroups(groupTickets(ticketData));
     } catch (error) {
       console.error(error);
     } finally {
@@ -43,18 +72,20 @@ export default function TicketsPage() {
     }
   };
 
-  const filteredTickets = tickets.filter((t) =>
-    activeTab === "all" ? true : t.status === activeTab
+  const filteredGroups = ticketGroups.filter((group) =>
+    activeTab === "all"
+      ? true
+      : group.tickets.some((t) => t.status === activeTab)
   );
 
-  const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage);
-  const displayedTickets = filteredTickets.slice(
+  const totalPages = Math.ceil(filteredGroups.length / ticketsPerPage);
+  const displayedGroups = filteredGroups.slice(
     (currentPage - 1) * ticketsPerPage,
     currentPage * ticketsPerPage
   );
 
-  const handleViewDetails = (ticket) => {
-    setSelectedTicket(ticket);
+  const handleViewDetails = (group) => {
+    setSelectedTicket(group);
     setModalOpen(true);
   };
 
@@ -75,14 +106,14 @@ export default function TicketsPage() {
             <div className="text-gray-400 text-center py-10">
               Đang tải vé...
             </div>
-          ) : filteredTickets.length === 0 ? (
+          ) : filteredGroups.length === 0 ? (
             <div className="text-gray-400 text-center py-10">
               Chưa có vé nào.
             </div>
           ) : (
             <>
               <TicketList
-                tickets={displayedTickets}
+                tickets={displayedGroups}
                 onViewDetails={handleViewDetails}
               />
 
@@ -100,7 +131,7 @@ export default function TicketsPage() {
 
       {modalOpen && selectedTicket && (
         <TicketModal
-          ticket={selectedTicket}
+          ticket={selectedTicket} 
           onClose={() => setModalOpen(false)}
           refresh={refreshTickets}
         />

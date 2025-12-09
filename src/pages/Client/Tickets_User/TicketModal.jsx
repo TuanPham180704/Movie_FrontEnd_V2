@@ -5,10 +5,12 @@ import QRCode from "react-qr-code";
 export default function TicketModal({ ticket, onClose, refresh }) {
   const [loading, setLoading] = useState(false);
 
+  // Khi nhấn thanh toán, dùng group_id
   const handlePay = async () => {
     setLoading(true);
     try {
-      await userTicketApi.pay(ticket.id);
+      const groupId = ticket.group_id ?? ticket.tickets[0]?.id; // nếu không có group, dùng id đầu
+      await userTicketApi.pay(groupId);
       refresh();
       onClose();
     } catch (error) {
@@ -17,6 +19,18 @@ export default function TicketModal({ ticket, onClose, refresh }) {
       setLoading(false);
     }
   };
+
+  const groupTickets = ticket.tickets || [ticket]; // nếu là nhóm, tickets[], còn đơn lẻ thì 1 vé
+
+  // Tổng tiền
+  const totalPrice =
+    ticket.totalPrice ??
+    groupTickets.reduce((sum, t) => sum + parseFloat(t.price), 0);
+
+  // Trạng thái nhóm: nếu có vé pending → pending
+  const groupStatus =
+    ticket.status ||
+    (groupTickets.some((t) => t.status === "pending") ? "pending" : "paid");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -41,30 +55,35 @@ export default function TicketModal({ ticket, onClose, refresh }) {
           <strong>Rạp:</strong> {ticket.room_name}
         </p>
         <p>
-          <strong>Ghế:</strong> {ticket.seat_number}
+          <strong>Ghế đã đặt:</strong>{" "}
+          {groupTickets.map((t) => t.seat_number).join(", ")}
         </p>
         <p>
-          <strong>Giờ đặt:</strong>{" "}
-          {new Date(ticket.booking_date).toLocaleString()}
+          <strong>Ngày giờ đặt:</strong>{" "}
+          {new Date(groupTickets[0].booking_date).toLocaleString()}
         </p>
         <p>
           <strong>Trạng thái:</strong>{" "}
-          {ticket.status === "paid"
+          {groupStatus === "paid"
             ? "Đã Thanh Toán"
-            : ticket.status === "pending"
+            : groupStatus === "pending"
             ? "Chờ Thanh Toán"
             : "Đã Hủy"}
         </p>
+        <p className="mt-2 font-semibold">
+          Tổng tiền: {totalPrice.toLocaleString()} VND
+        </p>
+
         <div className="mt-4 flex flex-col items-center gap-3">
-          {(ticket.status === "paid" || ticket.status === "pending") && (
+          {(groupStatus === "paid" || groupStatus === "pending") && (
             <div className="p-4 border rounded text-center bg-[#2A2A2A]">
               <p className="mb-2 font-medium text-gray-200">
-                {ticket.status === "paid"
+                {groupStatus === "paid"
                   ? "Quét QR để checkin"
                   : "QR chờ thanh toán"}
               </p>
               <QRCode
-                value={`ticket-${ticket.id}`}
+                value={`group-${ticket.group_id ?? groupTickets[0].id}`}
                 size={128}
                 className="mx-auto"
                 bgColor="#1A1A1A"
@@ -72,7 +91,7 @@ export default function TicketModal({ ticket, onClose, refresh }) {
               />
             </div>
           )}
-          {ticket.status === "pending" && (
+          {groupStatus === "pending" && (
             <button
               onClick={handlePay}
               disabled={loading}
@@ -81,7 +100,7 @@ export default function TicketModal({ ticket, onClose, refresh }) {
               {loading ? "Đang thanh toán..." : "Thanh toán"}
             </button>
           )}
-          {ticket.status === "cancelled" && (
+          {groupStatus === "cancelled" && (
             <p className="text-red-500 font-semibold">Vé đã hủy</p>
           )}
         </div>

@@ -8,32 +8,22 @@ const formatDateTime = (dateString) => {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
   if (isNaN(date)) return "Ngày giờ không hợp lệ";
-  const datePart = date.toLocaleDateString("vi-VN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-  const timePart = date.toLocaleTimeString("vi-VN", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return `${datePart} ${timePart}`;
+  return `${date.toLocaleDateString("vi-VN")} ${date.toLocaleTimeString(
+    "vi-VN",
+    { hour: "2-digit", minute: "2-digit" }
+  )}`;
 };
+
 const PaymentCountdown = ({ onTimeout, initialTime = 15 * 60 }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
-
   useEffect(() => {
-    if (timeLeft <= 0) {
-      onTimeout();
-      return;
-    }
+    if (timeLeft <= 0) return onTimeout();
     const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
     return () => clearInterval(timer);
   }, [timeLeft, onTimeout]);
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
-
   return (
     <div
       className={`text-xl font-bold p-2 rounded-lg text-center transition duration-500 ${
@@ -49,15 +39,26 @@ const PaymentCountdown = ({ onTimeout, initialTime = 15 * 60 }) => {
 };
 
 export default function TicketDetailPage() {
-  const { ticketId } = useParams();
-  const [ticket, setTicket] = useState(null);
+  const { ticketId } = useParams(); 
+  const [tickets, setTickets] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  const fetchTicket = async () => {
+  const fetchTickets = async () => {
     try {
-      const data = await userTicketApi.getById(ticketId);
-      setTicket(data);
+      const allTickets = await userTicketApi.getAll();
+      const groupTickets = allTickets.filter(
+        (t) => t.group_id.toString() === ticketId
+      );
+      if (!groupTickets.length) throw new Error("Không tìm thấy vé!");
+      setTickets(groupTickets);
+
+      // Tính tổng tiền từ các vé
+      const total = groupTickets.reduce(
+        (sum, t) => sum + parseFloat(t.price),
+        0
+      );
+      setTotalPrice(total);
     } catch (err) {
       console.error(err);
       toast.error("Không thể lấy thông tin vé!");
@@ -67,14 +68,25 @@ export default function TicketDetailPage() {
   };
 
   useEffect(() => {
-    fetchTicket();
+    fetchTickets();
   }, [ticketId]);
 
   const handlePayTicket = async () => {
-    if (!ticket) return;
+    if (!tickets.length) return;
     try {
-      const res = await userTicketApi.pay(ticket.id);
-      setTicket(res.ticket);
+      const group_id = tickets[0].group_id;
+      const res = await userTicketApi.pay(group_id);
+
+      // Cập nhật vé sau khi thanh toán
+      const updatedTickets = res.ticket?.tickets || tickets;
+      setTickets(updatedTickets);
+
+      // Cập nhật tổng tiền (backend trả total_price nếu có)
+      const total =
+        res.ticket?.total_price ||
+        updatedTickets.reduce((sum, t) => sum + parseFloat(t.price), 0);
+      setTotalPrice(total);
+
       toast.success("Thanh toán thành công!");
     } catch (err) {
       console.error(err);
@@ -88,48 +100,65 @@ export default function TicketDetailPage() {
   };
 
   if (loading) return <p className="text-center mt-10">Đang tải...</p>;
-  if (!ticket) return <p className="text-center mt-10">Không tìm thấy vé.</p>;
+  if (!tickets.length)
+    return <p className="text-center mt-10">Không tìm thấy vé.</p>;
+
+  const firstTicket = tickets[0];
 
   return (
     <div className="min-h-screen p-6 bg-gray-50 font-sans text-black">
       <section className="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-xl">
         <h1 className="text-3xl font-bold mb-4 text-gray-800">Chi tiết vé</h1>
-
         <div className="flex flex-col md:flex-row gap-6 items-start border-b pb-4 mb-4">
           <div className="flex-1 space-y-3 text-black">
             <p>
-              Phim: <b>{ticket.movie_title}</b>
+              Phim: <b>{firstTicket.movie_title}</b>
             </p>
             <p>
-              Rạp: <b>{ticket.room_name}</b>
+              Rạp: <b>{firstTicket.room_name}</b>
             </p>
             <p>
-              Ghế: <b>{ticket.seat_number}</b>
-            </p>
-            <p>
-              Ngày giờ: <b>{formatDateTime(ticket.booking_date)}</b>
+              Ngày giờ: <b>{formatDateTime(firstTicket.booking_date)}</b>
             </p>
             <p>
               Trạng thái:{" "}
               <b
                 className={
-                  ticket.status === "pending"
+                  firstTicket.status === "pending"
                     ? "text-orange-500"
                     : "text-green-600"
                 }
               >
-                {ticket.status === "pending" ? "Chờ thanh toán" : ticket.status}
+                {firstTicket.status === "pending"
+                  ? "Chờ thanh toán"
+                  : firstTicket.status}
               </b>
             </p>
             <p className="text-sm text-gray-500">
-              Mã vé: <b className="text-gray-800">{ticket.id}</b>
+              Mã nhóm vé:{" "}
+              <b className="text-gray-800">{firstTicket.group_id}</b>
+            </p>
+            <p className="text-lg font-semibold mt-2">
+              Tổng tiền: <b>{totalPrice.toLocaleString()} VND</b>
             </p>
 
-            {ticket.status === "pending" && (
-              <div className="pt-4">
-                <PaymentCountdown onTimeout={handlePaymentTimeout} />
-              </div>
+            {firstTicket.status === "pending" && (
+              <PaymentCountdown onTimeout={handlePaymentTimeout} />
             )}
+
+            <div>
+              <h2 className="font-semibold mt-2">Ghế đã đặt:</h2>
+              <ul className="list-disc ml-5">
+                {tickets.map((t) => (
+                  <li key={t.id}>
+                    Ghế {t.seat_number} - Trạng thái:{" "}
+                    {t.status === "pending"
+                      ? "Chờ thanh toán"
+                      : "Đã thanh toán"}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div className="flex-1 flex flex-col items-center justify-center w-full md:w-auto gap-2">
@@ -137,15 +166,15 @@ export default function TicketDetailPage() {
               QR để check-in
             </h1>
             <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
-              <QRCode value={`ticket-${ticket.id}`} size={180} />
+              <QRCode value={`group-${firstTicket.group_id}`} size={180} />
               <p className="text-center text-xs mt-2 text-gray-500">
-                Quét mã để xác nhận
+                Mã nhóm vé {firstTicket.group_id}
               </p>
             </div>
           </div>
         </div>
 
-        {ticket.status === "pending" && (
+        {firstTicket.status === "pending" && (
           <div className="flex justify-end gap-4">
             <button
               onClick={handlePayTicket}

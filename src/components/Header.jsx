@@ -148,6 +148,12 @@ export default function Header() {
                     >
                       Vé Đã Đặt
                     </Link>
+                    <Link
+                      to="/my-premium"
+                      className="block px-4 py-2 text-sm hover:bg-gray-700"
+                    >
+                      Gói Đã Mua
+                    </Link>
 
                     <button
                       onClick={handleLogout}

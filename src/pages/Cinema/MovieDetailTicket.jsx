@@ -26,6 +26,7 @@ export default function MovieDetailPage({ movieId }) {
 
   const navigate = useNavigate();
 
+  // Reload ghế sau khi đặt hoặc thanh toán
   const reloadSeats = async () => {
     if (!selectedRoom) return;
     try {
@@ -37,6 +38,7 @@ export default function MovieDetailPage({ movieId }) {
     }
   };
 
+  // Lấy dữ liệu movie, cinema, room, showtime
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,6 +63,7 @@ export default function MovieDetailPage({ movieId }) {
     fetchData();
   }, [movieId]);
 
+  // Lấy ghế khi chọn room
   useEffect(() => {
     if (!selectedRoom) return setSeats([]);
     const fetchSeats = async () => {
@@ -84,6 +87,7 @@ export default function MovieDetailPage({ movieId }) {
     );
   };
 
+  // Đặt vé
   const handleBookSeats = async () => {
     if (!selectedShowtime || selectedSeats.length === 0) {
       toast.warn("Chọn ghế trước khi mua vé!");
@@ -95,20 +99,30 @@ export default function MovieDetailPage({ movieId }) {
         showtime_id: selectedShowtime.id,
         seat_ids: seatIds,
       });
+
       await reloadSeats();
 
-      const ticketsWithDetails = res.tickets.map((t) => {
+      // BE trả về res.tickets = { tickets: [...], group_id, total_price }
+      const ticketsArray = res.tickets?.tickets || [];
+
+      const ticketsWithDetails = ticketsArray.map((t) => {
         const seat = seats.find((s) => s.id === t.seat_id);
         const room = rooms.find((r) => r.id === selectedShowtime.room_id);
         return {
           ...t,
-          movie_title: movie.title,
+          movie_title: movie?.title || "",
           room_name: room?.name || "",
           seat_number: seat?.seat_number || "",
         };
       });
 
-      setBookingInfo({ seats: ticketsWithDetails, status: "pending" });
+      setBookingInfo({
+        seats: ticketsWithDetails,
+        status: "pending",
+        group_id: res.tickets?.group_id,
+        total_price: res.tickets?.total_price,
+      });
+
       setOpenSeatModal(true);
       setSelectedSeats([]);
     } catch (err) {
@@ -117,19 +131,32 @@ export default function MovieDetailPage({ movieId }) {
     }
   };
 
+  // Thanh toán vé
   const handlePayTicket = async () => {
-    if (!bookingInfo || bookingInfo.seats.length === 0) return;
+    if (!bookingInfo || !bookingInfo.seats || bookingInfo.seats.length === 0)
+      return;
+
     try {
-      const res = await userTicketApi.pay(bookingInfo.seats[0].id);
+      // Thanh toán theo group_id để cập nhật tất cả vé
+      const res = await userTicketApi.pay(bookingInfo.group_id);
+
       await reloadSeats();
+
+      // res.tickets là mảng vé đã thanh toán
+      const paidTicketsArray = res.tickets || [];
+
+      const updatedSeats = bookingInfo.seats.map((s) => {
+        const updatedTicket = paidTicketsArray.find((t) => t.id === s.id);
+        return updatedTicket ? { ...s, status: updatedTicket.status } : s;
+      });
+
       setBookingInfo((prev) => ({
         ...prev,
-        seats: prev.seats.map((s) =>
-          s.id === res.ticket.id ? { ...s, status: res.ticket.status } : s
-        ),
+        seats: updatedSeats,
       }));
+
       toast.success("Thanh toán thành công!");
-      navigate(`/tickets/${res.ticket.id}`);
+      navigate(`/tickets/${bookingInfo.group_id}`);
     } catch (err) {
       console.error(err);
       toast.error("Thanh toán thất bại!");

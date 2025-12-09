@@ -3,7 +3,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "http://localhost:8080/api",
   headers: {
-     Authorization: `Bearer ${localStorage.getItem("token")}`,
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
   },
 });
 
@@ -24,7 +24,6 @@ export const userTicketApi = {
     const res = await api.get(`/user/tickets/${id}`);
     return res.data;
   },
-
   book: async (data) => {
     const res = await api.post("/user/tickets", data);
     return res.data;
