@@ -1,6 +1,8 @@
+
 import { useEffect, useState } from "react";
 import { movieTicketApi } from "../../api/movieTicketApi";
 import { Link } from "react-router-dom";
+
 export default function DevChillLandingPage() {
   const [movies, setMovies] = useState([]);
   const [visibleCount, setVisibleCount] = useState(4);
@@ -11,7 +13,7 @@ export default function DevChillLandingPage() {
     const fetchMovies = async () => {
       try {
         const data = await movieTicketApi.getAll({ page: 1, limit: 20 });
-        setMovies(data.movies);
+        setMovies(data.movies || []);
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       } finally {
@@ -20,7 +22,8 @@ export default function DevChillLandingPage() {
     };
     fetchMovies();
   }, []);
-
+  const nowShowingMovies = movies.filter((movie) => movie.is_offline === true);
+  const comingSoonMovies = movies.filter((movie) => movie.is_offline === false);
   const topComments = [
     {
       user: "Cristiano Ronaldo",
@@ -32,14 +35,14 @@ export default function DevChillLandingPage() {
     {
       user: "Dũng Lại Lập Trình",
       avatar:
-        "https://scontent.fdad1-3.fna.fbcdn.net/v/t39.30808-6/480611892_1190277999636090_6535903059927968272_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Gy8IzwtL_zwQ7kNvwGlFb1w&_nc_oc=AdmsHOjQYOE-342DiDx3psIq_rIOkRYe1GXKXsCPyIoJYHgAjRUgBTpKHSm05JkQHHrKS3BCrAXxStC1Jsvd_S8n&_nc_zt=23&_nc_ht=scontent.fdad1-3.fna&_nc_gid=8AYSGeudqD7P9BJvncnj3w&oh=00_AfkRFoHwCDs7xWMEZMT2sODKwHRrbdMoxTjDSeEyrV5EAA&oe=693A3BBA",
+        "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA1xyfSW.img?w=768&h=512&m=6&x=2466&y=587&s=368&d=368",
       comment:
         "Một ngày code và dạy học mệt mõi thì chỉ có DevChill làm cho tôi giải tỏa được căng thẳng",
     },
     {
       user: "Trần Hà Linh",
       avatar:
-        "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/540450845_1472881710415213_8508038144623935236_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEIwboGSGGezTLEYcx6YvFNnE0VmfxZRBacTRWZ_FlEFvLx0XD8rvN9x4n2oxZmr5X5Rsvh6fcAITbe20v30aL4&_nc_ohc=V2HVfaNbvkMQ7kNvwG0TOnw&_nc_oc=AdlsQni4IjfqTFCTK0EvsC4DvS8j9i0jJT-pvLsGy2HAZiiYueYc3a5Ce2lewK9uf-bWswgHzd3wSJ_neKWll0Ue&_nc_zt=23&_nc_ht=scontent.fdad1-4.fna&_nc_gid=hmUByvn0rFW8JcMzdFe5nQ&oh=00_AfgH41IAZISa5qsr-9OPtstvYm-oxPtoClmeLaIePtrqTg&oe=69322EA0",
+        "https://hinhnen4k.vn/wp-content/uploads/2025/01/anh-tiktoker-tran-ha-linh-cute-6.jpg",
       comment:
         "Mình luôn chọn DevChill cho cuối tuần sau mỗi lần lên mạng nhảy toe toe.",
     },
@@ -81,20 +84,17 @@ export default function DevChillLandingPage() {
         style={{ backgroundColor: "rgb(241, 228, 234)" }}
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center h-full text-center px-4 md:px-0">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-800 drop-shadow-lg animate-fadeIn">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-800">
             DevChill Cinema
           </h1>
-          <p className="mt-4 text-lg md:text-2xl text-gray-700 drop-shadow-md animate-fadeIn delay-200">
+          <p className="mt-4 text-lg md:text-2xl text-gray-700">
             Trải nghiệm rạp chiếu phim hiện đại, sang trọng và thư giãn.
           </p>
-          <button className="mt-8 px-8 py-4 bg-pink-400 hover:bg-pink-500 text-white rounded-full text-lg font-semibold shadow-lg transition transform hover:scale-105 animate-fadeIn delay-400">
-            Xem phim ngay
-          </button>
         </div>
       </section>
-      <section className="max-w-6xl mx-auto p-10 mt-16">
-        <h2 className="text-3xl font-bold mb-10 text-gray-800 text-center">
-          Phim đang chiếu
+      <section className="max-w-6xl mx-auto p-10 mt-16 text-black">
+        <h2 className="text-3xl font-bold mb-10 text-center">
+          🎬 Phim đang chiếu
         </h2>
 
         {loading ? (
@@ -102,48 +102,46 @@ export default function DevChillLandingPage() {
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-              {(showAll ? movies : movies.slice(0, visibleCount)).map(
-                (movie) => (
-                  <Link key={movie.id} to={`/movies/tickets/${movie.id}`}>
-                    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-3xl">
-                      <div className="relative">
-                        <img
-                          src={movie.poster_url}
-                          alt={movie.title}
-                          className="w-full h-80 object-cover"
-                        />
-                        <span className="absolute top-3 left-3 bg-purple-600 text-white font-semibold px-3 py-1 rounded-full text-sm">
-                          {movie.category.split(",")[0]}
+              {(showAll
+                ? nowShowingMovies
+                : nowShowingMovies.slice(0, visibleCount)
+              ).map((movie) => (
+                <Link key={movie.id} to={`/movies/tickets/${movie.id}`}>
+                  <div className="bg-white rounded-3xl shadow-2xl overflow-hidden hover:scale-105 transition">
+                    <div className="relative">
+                      <img
+                        src={movie.poster_url}
+                        alt={movie.title}
+                        className="w-full h-80 object-cover"
+                      />
+                      <span className="absolute top-3 left-3 bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+                        Đang chiếu
+                      </span>
+                    </div>
+                    <div className="p-5">
+                      <h3 className="font-bold text-lg line-clamp-1">
+                        {movie.title}
+                      </h3>
+                      <div className="flex justify-between mt-3">
+                        <span className="text-purple-600 font-semibold">
+                          ⭐ {movie.rating}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {Math.floor(movie.duration / 60)}h{" "}
+                          {movie.duration % 60}m
                         </span>
                       </div>
-                      <div className="p-5 flex flex-col gap-3">
-                        <h3 className="font-bold text-lg text-gray-800 hover:text-purple-600 transition line-clamp-1">
-                          {movie.title}
-                        </h3>
-                        <p className="text-gray-500 text-sm line-clamp-1">
-                          {movie.category.split(",").join(" | ")}
-                        </p>
-                        <div className="flex items-center justify-between border-t pt-3">
-                          <span className="text-purple-600 font-semibold text-lg">
-                            ⭐ {movie.rating}
-                          </span>
-                          <span className="text-gray-600 text-sm">
-                            {Math.floor(movie.duration / 60)}h{" "}
-                            {movie.duration % 60}m
-                          </span>
-                        </div>
-                      </div>
                     </div>
-                  </Link>
-                )
-              )}
+                  </div>
+                </Link>
+              ))}
             </div>
 
-            {movies.length > 4 && (
+            {nowShowingMovies.length > visibleCount && (
               <div className="text-center mt-8">
                 <button
                   onClick={() => setShowAll(!showAll)}
-                  className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full shadow-lg transition transform hover:scale-105"
+                  className="px-6 py-3 bg-purple-600 text-white rounded-full"
                 >
                   {showAll ? "Ẩn bớt" : "Xem thêm"}
                 </button>
@@ -151,6 +149,42 @@ export default function DevChillLandingPage() {
             )}
           </>
         )}
+      </section>
+      <section className="max-w-6xl mx-auto p-10 mt-20 text-black">
+        <h2 className="text-3xl font-bold mb-10 text-center">
+          🎬 Phim sắp chiếu
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          {comingSoonMovies.map((movie) => (
+            <div
+              key={movie.id}
+              className="bg-white rounded-3xl shadow-lg opacity-90"
+            >
+              <div className="relative">
+                <img
+                  src={movie.poster_url}
+                  alt={movie.title}
+                  className="w-full h-80 object-cover"
+                />
+                <span className="absolute top-3 left-3 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">
+                  Sắp chiếu
+                </span>
+              </div>
+              <div className="p-5 text-center">
+                <h3 className="font-bold text-lg line-clamp-1">
+                  {movie.title}
+                </h3>
+                <button
+                  disabled
+                  className="mt-4 px-4 py-2 bg-gray-300 text-gray-600 rounded-full cursor-not-allowed"
+                >
+                  Sắp ra mắt
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="max-w-5xl mx-auto p-10 mt-20 bg-white rounded-3xl shadow-xl">
         <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
