@@ -27,6 +27,7 @@ export default function SubscriptionPlanManagement() {
       const data = await subscriptionPlanApi.getAll();
       setPlans(data);
       setFilteredPlans(data);
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("Lỗi tải gói subscription");
     }
@@ -84,6 +85,7 @@ export default function SubscriptionPlanManagement() {
       }
       setIsPlanModalOpen(false);
       fetchPlans();
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("Thao tác thất bại!");
     }
@@ -95,6 +97,7 @@ export default function SubscriptionPlanManagement() {
       toast.success("Xóa gói thành công!");
       setIsDeleteModalOpen(false);
       fetchPlans();
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("Xóa thất bại!");
     }

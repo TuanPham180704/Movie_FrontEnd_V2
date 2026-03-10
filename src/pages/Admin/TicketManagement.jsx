@@ -27,6 +27,7 @@ export default function TicketManagement() {
       const data = await ticketApi.getAll();
       setTickets(data);
       setFilteredTickets(data);
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("Lỗi tải vé");
     }
@@ -73,6 +74,7 @@ export default function TicketManagement() {
       toast.success("Cập nhật vé thành công!");
       setIsTicketModalOpen(false);
       fetchTickets();
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("Cập nhật thất bại!");
     }
@@ -84,6 +86,7 @@ export default function TicketManagement() {
       toast.success("Xóa vé thành công!");
       setIsDeleteModalOpen(false);
       fetchTickets();
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("Xóa vé thất bại!");
     }

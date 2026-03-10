@@ -4,12 +4,10 @@ import QRCode from "react-qr-code";
 
 export default function TicketModal({ ticket, onClose, refresh }) {
   const [loading, setLoading] = useState(false);
-
-  // Khi nhấn thanh toán, dùng group_id
   const handlePay = async () => {
     setLoading(true);
     try {
-      const groupId = ticket.group_id ?? ticket.tickets[0]?.id; // nếu không có group, dùng id đầu
+      const groupId = ticket.group_id ?? ticket.tickets[0]?.id;
       await userTicketApi.pay(groupId);
       refresh();
       onClose();
@@ -20,14 +18,10 @@ export default function TicketModal({ ticket, onClose, refresh }) {
     }
   };
 
-  const groupTickets = ticket.tickets || [ticket]; // nếu là nhóm, tickets[], còn đơn lẻ thì 1 vé
-
-  // Tổng tiền
+  const groupTickets = ticket.tickets || [ticket]; 
   const totalPrice =
     ticket.totalPrice ??
     groupTickets.reduce((sum, t) => sum + parseFloat(t.price), 0);
-
-  // Trạng thái nhóm: nếu có vé pending → pending
   const groupStatus =
     ticket.status ||
     (groupTickets.some((t) => t.status === "pending") ? "pending" : "paid");

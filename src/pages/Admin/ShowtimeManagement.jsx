@@ -27,6 +27,7 @@ export default function ShowtimeManagement() {
       const data = await showtimeApi.getAll();
       setShowtimes(data);
       setFilteredShowtimes(data);
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("Lỗi tải suất chiếu");
     }
@@ -38,6 +39,7 @@ export default function ShowtimeManagement() {
       setMovies(moviesData.movies || []);
       const roomsData = await roomApi.getAll();
       setRooms(roomsData);
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("Lỗi tải phim hoặc phòng");
     }
@@ -107,6 +109,7 @@ export default function ShowtimeManagement() {
       toast.success("Xóa suất chiếu thành công!");
       setIsDeleteModalOpen(false);
       fetchShowtimes();
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("Xóa thất bại!");
     }

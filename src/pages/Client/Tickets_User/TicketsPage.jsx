@@ -8,6 +8,7 @@ import { userTicketApi } from "../../../api/userTicketApi";
 import { toast } from "react-toastify";
 
 export default function TicketsPage() {
+  // eslint-disable-next-line no-unused-vars
   const [tickets, setTickets] = useState([]);
   const [ticketGroups, setTicketGroups] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
